@@ -92,7 +92,7 @@ export function FlashcardsView({
     }
   };
 
-  const handleReview = async (result: 'correct' | 'wrong') => {
+  const handleReview = React.useCallback(async (result: 'correct' | 'wrong') => {
     if (!currentCard || submittingReview) return;
     setSubmittingReview(true);
 
@@ -133,7 +133,7 @@ export function FlashcardsView({
     } finally {
       setSubmittingReview(false);
     }
-  };
+  }, [currentCard, submittingReview, currentIndex, filteredCards.length]);
 
   // Keyboard navigation shortcuts
   React.useEffect(() => {
@@ -163,7 +163,7 @@ export function FlashcardsView({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isFlipped, sessionCompleted, filteredCards.length, currentCard]);
+  }, [isFlipped, sessionCompleted, filteredCards.length, handleReview]);
 
   const restartStudySession = () => {
     setCurrentIndex(0);
@@ -504,3 +504,4 @@ export function FlashcardsView({
     </div>
   );
 }
+

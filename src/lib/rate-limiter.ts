@@ -57,3 +57,4 @@ export async function checkAndRecordAiUsage(
     remaining: HOURLY_GENERATION_LIMIT - (currentCount + 1),
   };
 }
+

@@ -267,3 +267,4 @@ ${excerpt}`;
 
   return validated.data;
 }
+

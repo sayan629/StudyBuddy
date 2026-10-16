@@ -43,12 +43,10 @@ export function QuizView({
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  // Active quiz-taking states
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [selectedAnswers, setSelectedAnswers] = React.useState<Record<number, number>>({});
   const [showExplanationForCurrent, setShowExplanationForCurrent] = React.useState(false);
   const [isQuizFinished, setIsQuizFinished] = React.useState(false);
-  const [savingAttempt, setSavingAttempt] = React.useState(false);
 
   const currentQuestion = questions[currentQuestionIndex];
   const hasQuestions = questions.length > 0;
@@ -111,7 +109,6 @@ export function QuizView({
   const finishQuiz = async () => {
     if (!quiz) return;
     setIsQuizFinished(true);
-    setSavingAttempt(true);
 
     // Calculate score
     let score = 0;
@@ -138,8 +135,6 @@ export function QuizView({
       }
     } catch {
       toast.error('Could not save quiz attempt.');
-    } finally {
-      setSavingAttempt(false);
     }
   };
 
@@ -258,7 +253,6 @@ export function QuizView({
               const isSelected = selectedAnswers[currentQuestionIndex] === idx;
               const isCorrect = idx === currentQuestion.correct_index;
 
-              let buttonVariant = 'outline';
               let customStyle = 'border-border hover:bg-muted/60 text-left';
 
               if (showExplanationForCurrent) {
@@ -492,3 +486,4 @@ export function QuizView({
     </div>
   );
 }
+
