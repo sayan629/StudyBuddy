@@ -53,11 +53,13 @@ export async function POST(request: Request) {
       .single();
 
     if (insertError) {
+      console.error('[POST /api/documents] Insert error:', insertError);
       return NextResponse.json({ error: insertError.message }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, document }, { status: 201 });
   } catch (error: unknown) {
+    console.error('[POST /api/documents] Unhandled error:', error);
     const message = error instanceof Error ? error.message : 'Internal Server Error';
     return NextResponse.json({ error: message }, { status: 500 });
   }
