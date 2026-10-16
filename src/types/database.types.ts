@@ -8,112 +8,272 @@ export type Json =
 
 export type SourceType = 'pdf' | 'txt' | 'md' | 'paste';
 
-export interface DocumentRow {
-  id: string;
-  user_id: string;
-  title: string;
-  source_type: SourceType;
-  raw_text: string;
-  summary: string | null;
-  key_points: string[] | null;
-  created_at: string;
-}
-
-export interface FlashcardRow {
-  id: string;
-  user_id: string;
-  document_id: string;
-  question: string;
-  answer: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  times_correct: number;
-  times_wrong: number;
-  next_review_date: string;
-}
-
-export interface QuizRow {
-  id: string;
-  user_id: string;
-  document_id: string;
-  title: string;
-  created_at: string;
-}
-
-export interface QuizQuestionRow {
-  id: string;
-  quiz_id: string;
-  question: string;
-  options: string[];
-  correct_index: number;
-  explanation: string;
-}
-
-export interface QuizAttemptRow {
-  id: string;
-  user_id: string;
-  quiz_id: string;
-  score: number;
-  total: number;
-  taken_at: string;
-}
-
-export interface UserAiUsageRow {
-  id: string;
-  user_id: string;
-  action: 'summary' | 'flashcards' | 'quiz';
-  created_at: string;
-}
-
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       documents: {
-        Row: DocumentRow;
-        Insert: Omit<DocumentRow, 'id' | 'created_at'> & {
+        Row: {
+          id: string;
+          user_id: string;
+          title: string;
+          source_type: SourceType;
+          raw_text: string;
+          summary: string | null;
+          key_points: Json | null;
+          created_at: string;
+        };
+        Insert: {
           id?: string;
+          user_id: string;
+          title: string;
+          source_type: SourceType;
+          raw_text: string;
+          summary?: string | null;
+          key_points?: Json | null;
           created_at?: string;
         };
-        Update: Partial<Omit<DocumentRow, 'id' | 'user_id' | 'created_at'>>;
+        Update: {
+          id?: string;
+          user_id?: string;
+          title?: string;
+          source_type?: SourceType;
+          raw_text?: string;
+          summary?: string | null;
+          key_points?: Json | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'documents_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       flashcards: {
-        Row: FlashcardRow;
-        Insert: Omit<FlashcardRow, 'id'> & {
-          id?: string;
+        Row: {
+          id: string;
+          user_id: string;
+          document_id: string;
+          question: string;
+          answer: string;
+          difficulty: 'easy' | 'medium' | 'hard';
+          times_correct: number;
+          times_wrong: number;
+          next_review_date: string;
         };
-        Update: Partial<Omit<FlashcardRow, 'id' | 'user_id' | 'document_id'>>;
+        Insert: {
+          id?: string;
+          user_id: string;
+          document_id: string;
+          question: string;
+          answer: string;
+          difficulty?: 'easy' | 'medium' | 'hard';
+          times_correct?: number;
+          times_wrong?: number;
+          next_review_date?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          document_id?: string;
+          question?: string;
+          answer?: string;
+          difficulty?: 'easy' | 'medium' | 'hard';
+          times_correct?: number;
+          times_wrong?: number;
+          next_review_date?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'flashcards_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'flashcards_document_id_fkey';
+            columns: ['document_id'];
+            isOneToOne: false;
+            referencedRelation: 'documents';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       quizzes: {
-        Row: QuizRow;
-        Insert: Omit<QuizRow, 'id' | 'created_at'> & {
+        Row: {
+          id: string;
+          user_id: string;
+          document_id: string;
+          title: string;
+          created_at: string;
+        };
+        Insert: {
           id?: string;
+          user_id: string;
+          document_id: string;
+          title: string;
           created_at?: string;
         };
-        Update: Partial<Omit<QuizRow, 'id' | 'user_id' | 'document_id'>>;
+        Update: {
+          id?: string;
+          user_id?: string;
+          document_id?: string;
+          title?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'quizzes_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'quizzes_document_id_fkey';
+            columns: ['document_id'];
+            isOneToOne: false;
+            referencedRelation: 'documents';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       quiz_questions: {
-        Row: QuizQuestionRow;
-        Insert: Omit<QuizQuestionRow, 'id'> & {
-          id?: string;
+        Row: {
+          id: string;
+          quiz_id: string;
+          question: string;
+          options: Json;
+          correct_index: number;
+          explanation: string;
         };
-        Update: Partial<Omit<QuizQuestionRow, 'id' | 'quiz_id'>>;
+        Insert: {
+          id?: string;
+          quiz_id: string;
+          question: string;
+          options: Json;
+          correct_index: number;
+          explanation: string;
+        };
+        Update: {
+          id?: string;
+          quiz_id?: string;
+          question?: string;
+          options?: Json;
+          correct_index?: number;
+          explanation?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'quiz_questions_quiz_id_fkey';
+            columns: ['quiz_id'];
+            isOneToOne: false;
+            referencedRelation: 'quizzes';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       quiz_attempts: {
-        Row: QuizAttemptRow;
-        Insert: Omit<QuizAttemptRow, 'id' | 'taken_at'> & {
+        Row: {
+          id: string;
+          user_id: string;
+          quiz_id: string;
+          score: number;
+          total: number;
+          taken_at: string;
+        };
+        Insert: {
           id?: string;
+          user_id: string;
+          quiz_id: string;
+          score: number;
+          total: number;
           taken_at?: string;
         };
-        Update: Partial<Omit<QuizAttemptRow, 'id' | 'user_id' | 'quiz_id'>>;
+        Update: {
+          id?: string;
+          user_id?: string;
+          quiz_id?: string;
+          score?: number;
+          total?: number;
+          taken_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'quiz_attempts_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'quiz_attempts_quiz_id_fkey';
+            columns: ['quiz_id'];
+            isOneToOne: false;
+            referencedRelation: 'quizzes';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       user_ai_usage: {
-        Row: UserAiUsageRow;
-        Insert: Omit<UserAiUsageRow, 'id' | 'created_at'> & {
+        Row: {
+          id: string;
+          user_id: string;
+          action: 'summary' | 'flashcards' | 'quiz';
+          created_at: string;
+        };
+        Insert: {
           id?: string;
+          user_id: string;
+          action: 'summary' | 'flashcards' | 'quiz';
           created_at?: string;
         };
-        Update: Partial<Omit<UserAiUsageRow, 'id'>>;
+        Update: {
+          id?: string;
+          user_id?: string;
+          action?: 'summary' | 'flashcards' | 'quiz';
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'user_ai_usage_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
       };
     };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      [_ in never]: never;
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
   };
-}
+};
 
+export type Tables<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Row'];
+export type TablesInsert<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Insert'];
+export type TablesUpdate<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Update'];
+
+export type DocumentRow = Tables<'documents'>;
+export type FlashcardRow = Tables<'flashcards'>;
+export type QuizRow = Tables<'quizzes'>;
+export type QuizQuestionRow = Tables<'quiz_questions'>;
+export type QuizAttemptRow = Tables<'quiz_attempts'>;
+export type UserAiUsageRow = Tables<'user_ai_usage'>;
