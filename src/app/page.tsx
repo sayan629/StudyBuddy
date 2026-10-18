@@ -47,7 +47,7 @@ export default function Home() {
           {/* Badge */}
           <div className="relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-violet-400/40 bg-violet-500/10 text-violet-600 dark:text-violet-400 text-xs font-heading font-semibold mb-8 animate-bounce-subtle">
             <Sparkles className="h-3.5 w-3.5 text-violet-500" />
-            <span>Powered by SayanI</span>
+            <span>Powered by Beta</span>
             <span className="h-2 w-2 rounded-full bg-violet-500 animate-ping" />
           </div>
 
