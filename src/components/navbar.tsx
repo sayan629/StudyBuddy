@@ -38,29 +38,45 @@ export function Navbar() {
   React.useEffect(() => {
     async function loadUser() {
       const { data } = await supabase.auth.getUser();
-      if (data?.user?.email) {
-        setUserEmail(data.user.email);
-      }
+      setUserEmail(data?.user?.email ?? null);
     }
     loadUser();
+
+    // Listen to auth state transitions to immediately sync or clear email
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || !session) {
+        setUserEmail(null);
+      } else if (session?.user?.email) {
+        setUserEmail(session.user.email);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [supabase]);
 
   const handleLogout = async () => {
     setLoggingOut(true);
+    // Instantly wipe email state from UI
+    setUserEmail(null);
     try {
       await supabase.auth.signOut();
+      await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
       toast.success('Logged out successfully');
-      router.push('/login');
-      router.refresh();
+      // Full browser navigation guarantees immediate transition & clean state without needing a manual refresh
+      window.location.href = '/login';
     } catch {
       toast.error('Failed to log out');
-    } finally {
       setLoggingOut(false);
     }
   };
 
   const handleDeleteAccount = async () => {
     setDeleting(true);
+    setUserEmail(null);
     try {
       const res = await fetch('/api/account', { method: 'DELETE' });
       if (!res.ok) {
@@ -69,12 +85,10 @@ export function Navbar() {
       }
       toast.success('Your account and all associated data have been permanently deleted.');
       setDeleteDialogOpen(false);
-      router.push('/login');
-      router.refresh();
+      window.location.href = '/login';
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to delete account';
       toast.error(message);
-    } finally {
       setDeleting(false);
     }
   };

@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,7 +12,6 @@ import { BookOpen, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function SignUpPage() {
-  const router = useRouter();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
@@ -46,7 +44,7 @@ export default function SignUpPage() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?type=signup&next=/auth/verified`,
         },
       });
 
@@ -57,8 +55,7 @@ export default function SignUpPage() {
 
       // Check if user session was created immediately (email confirmation turned off in Supabase)
       if (data.session) {
-        router.push('/dashboard');
-        router.refresh();
+        window.location.href = '/dashboard';
       } else {
         setSuccessMessage('Account created! Please check your email inbox to confirm your account before logging in.');
       }
@@ -75,16 +72,28 @@ export default function SignUpPage() {
     setGoogleLoading(true);
 
     try {
-      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+      const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       });
 
       if (oauthError) {
-        setError(oauthError.message);
+        const errorMsg = oauthError.message.toLowerCase().includes('provider')
+          ? 'Google Sign-In is not enabled yet in your Supabase project. Please enable Google under Authentication > Providers in the Supabase Dashboard, or sign up with email and password below.'
+          : oauthError.message;
+        setError(errorMsg);
         setGoogleLoading(false);
+        return;
+      }
+
+      if (data?.url) {
+        window.location.href = data.url;
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to connect to Google';

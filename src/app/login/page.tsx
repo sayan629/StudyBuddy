@@ -2,23 +2,23 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { BookOpen, AlertCircle, Loader2 } from 'lucide-react';
+import { BookOpen, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 import { Suspense } from 'react';
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/dashboard';
   const queryError = searchParams.get('error');
+  const isVerified = searchParams.get('verified') === 'true';
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -41,15 +41,15 @@ function LoginForm() {
 
       if (signInError) {
         setError(signInError.message);
+        setLoading(false);
         return;
       }
 
-      router.push(redirectTo);
-      router.refresh();
+      // Hard redirect ensures fresh server cookies and immediate auth state
+      window.location.href = redirectTo;
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'An unexpected error occurred';
       setError(message);
-    } finally {
       setLoading(false);
     }
   };
@@ -59,16 +59,28 @@ function LoginForm() {
     setGoogleLoading(true);
 
     try {
-      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+      const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       });
 
       if (oauthError) {
-        setError(oauthError.message);
+        const errorMsg = oauthError.message.toLowerCase().includes('provider')
+          ? 'Google Sign-In is not enabled yet in your Supabase project. Please enable Google under Authentication > Providers in the Supabase Dashboard, or sign in with email and password below.'
+          : oauthError.message;
+        setError(errorMsg);
         setGoogleLoading(false);
+        return;
+      }
+
+      if (data?.url) {
+        window.location.href = data.url;
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to connect to Google';
@@ -107,6 +119,15 @@ function LoginForm() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {isVerified && (
+              <Alert className="py-2.5 border-emerald-500/50 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 rounded-xl">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                <AlertDescription className="text-xs leading-relaxed font-semibold">
+                  Email verified successfully! You can now sign in with your credentials.
+                </AlertDescription>
+              </Alert>
+            )}
+
             {error && (
               <Alert variant="destructive" className="py-2.5 rounded-xl">
                 <AlertCircle className="h-4 w-4" />
