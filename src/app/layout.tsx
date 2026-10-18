@@ -53,6 +53,10 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'StudyBuddy — AI Study Assistant',
   description: 'Upload notes or PDFs and get instant summaries, flashcards, and quizzes powered by Gemini AI.',
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({

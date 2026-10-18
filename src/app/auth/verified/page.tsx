@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, BookOpen, ArrowRight, Sparkles } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { BrandLogo } from '@/components/brand-logo';
 
 export default function VerifiedPage() {
   const router = useRouter();
@@ -41,11 +42,8 @@ export default function VerifiedPage() {
       <div className="w-full max-w-md space-y-6 relative z-10">
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2.5 font-heading font-extrabold text-2xl tracking-tight">
-            <div className="p-2 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-cyan-500 text-white shadow-xl animate-float-1">
-              <BookOpen className="h-6 w-6" />
-            </div>
-            <span className="text-gradient-rainbow">StudyBuddy</span>
+          <Link href="/" className="inline-flex items-center tracking-tight group">
+            <BrandLogo size="lg" />
           </Link>
           <p className="text-xs text-muted-foreground font-sans">Your AI-powered study companion</p>
         </div>

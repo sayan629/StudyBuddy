@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { BrandLogo } from '@/components/brand-logo';
 import {
-  BookOpen, Sparkles, Layers, CheckSquare, ArrowRight,
+  Sparkles, Layers, CheckSquare, ArrowRight,
   Upload, Brain, TrendingUp, Zap, Star, Shield, Lightbulb,
 } from 'lucide-react';
 
@@ -17,12 +18,9 @@ export default function Home() {
       {/* ── Navbar ── */}
       <header className="border-b border-border/40 bg-background/80 backdrop-blur-xl sticky top-0 z-40">
         <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-2.5 tracking-tight">
-            <div className="p-2 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-cyan-500 text-white shadow-lg animate-float-1">
-              <BookOpen className="h-5 w-5" />
-            </div>
-            <span className="font-heading font-extrabold text-xl text-gradient-rainbow">StudyBuddy</span>
-          </div>
+          <Link href="/" className="flex items-center gap-2.5 tracking-tight group">
+            <BrandLogo size="md" />
+          </Link>
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <Link href="/login">
@@ -203,11 +201,8 @@ export default function Home() {
       <footer className="border-t border-border/40 py-8 bg-card/30 backdrop-blur relative z-10">
         <div className="container mx-auto max-w-6xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-gradient-to-br from-violet-500 to-cyan-500 text-white shadow-sm">
-              <BookOpen className="h-3.5 w-3.5" />
-            </div>
-            <span className="font-heading font-bold text-foreground">StudyBuddy</span>
-            <span className="font-mono">© {new Date().getFullYear()} All rights reserved.</span>
+            <BrandLogo size="xs" animate={false} />
+            <span className="font-mono text-[11px] text-muted-foreground ml-2">© {new Date().getFullYear()} All rights reserved.</span>
           </div>
           <div className="flex items-center gap-4 font-mono">
             <span> Made by Sayan</span>

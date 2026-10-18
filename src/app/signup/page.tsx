@@ -8,8 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { BookOpen, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { BrandLogo } from '@/components/brand-logo';
 
 export default function SignUpPage() {
   const [email, setEmail] = React.useState('');
@@ -115,11 +116,8 @@ export default function SignUpPage() {
 
       <div className="w-full max-w-md space-y-6 relative z-10">
         <div className="flex flex-col items-center text-center space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2.5 font-heading font-extrabold text-2xl tracking-tight">
-            <div className="p-2 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-cyan-500 text-white shadow-xl animate-float-1">
-              <BookOpen className="h-6 w-6" />
-            </div>
-            <span className="text-gradient-rainbow">StudyBuddy</span>
+          <Link href="/" className="inline-flex items-center tracking-tight group">
+            <BrandLogo size="lg" />
           </Link>
           <p className="text-xs text-muted-foreground font-sans">Your AI-powered study assistant</p>
         </div>

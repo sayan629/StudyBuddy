@@ -22,7 +22,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { BookOpen, User, LogOut, Trash2, PlusCircle, LayoutDashboard, Loader2 } from 'lucide-react';
+import { BrandLogo } from '@/components/brand-logo';
+import { User, LogOut, Trash2, PlusCircle, LayoutDashboard, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function Navbar() {
@@ -98,13 +99,8 @@ export function Navbar() {
       <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-8">
           <div className="flex items-center gap-6">
-            <Link href="/dashboard" className="flex items-center gap-2.5 tracking-tight">
-              <div className="p-1.5 animated-bg text-white rounded-xl shadow-md">
-                <BookOpen className="h-5 w-5" />
-              </div>
-              <span className="font-heading font-extrabold text-lg gradient-text-static">
-                StudyBuddy
-              </span>
+            <Link href="/dashboard" className="flex items-center gap-2.5 tracking-tight group">
+              <BrandLogo size="sm" />
             </Link>
 
             <nav className="hidden sm:flex items-center gap-1">
