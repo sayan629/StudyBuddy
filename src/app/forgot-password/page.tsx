@@ -44,39 +44,43 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-muted/30">
-      <div className="absolute top-4 right-4">
+    <div className="relative min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-background overflow-hidden">
+      {/* Background Decorative Aura Blobs */}
+      <div className="aura-blob blob-purple w-96 h-96 -top-20 -left-20" />
+      <div className="aura-blob blob-cyan w-96 h-96 -bottom-20 -right-20" />
+
+      <div className="absolute top-4 right-4 z-20">
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-md space-y-6 relative z-10">
         <div className="flex flex-col items-center text-center space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2 font-bold text-2xl tracking-tight">
-            <div className="p-2 bg-primary text-primary-foreground rounded-xl shadow-md">
+          <Link href="/" className="inline-flex items-center gap-2.5 font-heading font-extrabold text-2xl tracking-tight">
+            <div className="p-2 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-cyan-500 text-white shadow-xl animate-float-1">
               <BookOpen className="h-6 w-6" />
             </div>
-            <span>StudyBuddy</span>
+            <span className="text-gradient-rainbow">StudyBuddy</span>
           </Link>
-          <p className="text-sm text-muted-foreground">Your AI-powered study companion</p>
+          <p className="text-xs text-muted-foreground font-sans">Your AI-powered study assistant</p>
         </div>
 
-        <Card className="shadow-lg border-border/80">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-xl font-semibold">Reset your password</CardTitle>
-            <CardDescription>
+        <Card className="rainbow-border-card border-0 shadow-2xl overflow-hidden relative">
+          <CardHeader className="space-y-1 pb-4">
+            <CardTitle className="text-2xl font-heading font-extrabold tracking-tight">Reset password</CardTitle>
+            <CardDescription className="text-xs">
               Enter your email address and we&apos;ll send you a password reset link
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
-              <Alert variant="destructive" className="py-2.5">
+              <Alert variant="destructive" className="py-2.5 rounded-xl">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription className="text-xs leading-relaxed">{error}</AlertDescription>
               </Alert>
             )}
 
             {success ? (
-              <Alert className="py-3 border-emerald-500/50 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300">
+              <Alert className="py-3 border-emerald-500/50 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 rounded-xl">
                 <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 <AlertDescription className="text-xs leading-relaxed">
                   If an account exists with <strong>{email}</strong>, you will receive an email shortly with instructions to reset your password.
@@ -85,30 +89,35 @@ export default function ForgotPasswordPage() {
             ) : (
               <form onSubmit={handleResetPassword} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="reset-email">Email address</Label>
+                  <Label htmlFor="reset-email" className="font-heading font-semibold text-xs">Email address</Label>
                   <Input
                     id="reset-email"
                     type="email"
                     placeholder="name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className="rounded-xl border-violet-300/40 dark:border-violet-700/40 h-10 text-xs focus-visible:ring-violet-500"
                     required
                     autoComplete="email"
                     disabled={loading}
                   />
                 </div>
 
-                <Button type="submit" className="w-full h-10 font-medium" disabled={loading}>
+                <Button
+                  type="submit"
+                  className="w-full h-11 gradient-cosmic shimmer-button text-white font-heading font-bold rounded-xl shadow-lg hover:opacity-95 transition-all"
+                  disabled={loading}
+                >
                   {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                   Send reset link
                 </Button>
               </form>
             )}
           </CardContent>
-          <CardFooter className="flex justify-center border-t border-border pt-4">
+          <CardFooter className="flex justify-center border-t border-border/40 pt-4">
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground font-medium"
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-violet-600 dark:hover:text-violet-400 font-medium transition-colors"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               Back to sign in

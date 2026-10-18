@@ -81,14 +81,14 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-8">
           <div className="flex items-center gap-6">
-            <Link href="/dashboard" className="flex items-center gap-2.5 font-bold text-lg tracking-tight">
-              <div className="p-1.5 bg-primary text-primary-foreground rounded-lg shadow-sm">
+            <Link href="/dashboard" className="flex items-center gap-2.5 tracking-tight">
+              <div className="p-1.5 animated-bg text-white rounded-xl shadow-md">
                 <BookOpen className="h-5 w-5" />
               </div>
-              <span className="bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
+              <span className="font-heading font-extrabold text-lg gradient-text-static">
                 StudyBuddy
               </span>
             </Link>
@@ -96,9 +96,13 @@ export function Navbar() {
             <nav className="hidden sm:flex items-center gap-1">
               <Link href="/dashboard">
                 <Button
-                  variant={pathname === '/dashboard' ? 'secondary' : 'ghost'}
+                  variant={pathname === '/dashboard' ? 'default' : 'ghost'}
                   size="sm"
-                  className="gap-1.5 font-medium text-xs sm:text-sm"
+                  className={`gap-1.5 font-medium text-xs sm:text-sm ${
+                    pathname === '/dashboard'
+                      ? 'animated-bg text-white border-0 shadow-sm hover:opacity-90'
+                      : 'hover:text-violet-600 dark:hover:text-violet-400'
+                  }`}
                 >
                   <LayoutDashboard className="h-4 w-4" />
                   Dashboard
@@ -106,9 +110,13 @@ export function Navbar() {
               </Link>
               <Link href="/dashboard/upload">
                 <Button
-                  variant={pathname === '/dashboard/upload' ? 'secondary' : 'ghost'}
+                  variant={pathname === '/dashboard/upload' ? 'default' : 'ghost'}
                   size="sm"
-                  className="gap-1.5 font-medium text-xs sm:text-sm"
+                  className={`gap-1.5 font-medium text-xs sm:text-sm ${
+                    pathname === '/dashboard/upload'
+                      ? 'animated-bg text-white border-0 shadow-sm hover:opacity-90'
+                      : 'hover:text-violet-600 dark:hover:text-violet-400'
+                  }`}
                 >
                   <PlusCircle className="h-4 w-4" />
                   New Upload
@@ -121,11 +129,11 @@ export function Navbar() {
             <ThemeToggle />
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="inline-flex h-9 items-center gap-2 rounded-full border border-input bg-background px-3 text-xs font-medium hover:bg-accent hover:text-accent-foreground outline-none cursor-pointer transition-colors">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <User className="h-3.5 w-3.5" />
+              <DropdownMenuTrigger className="inline-flex h-9 items-center gap-2 rounded-full border border-violet-200/60 dark:border-violet-800/40 bg-violet-50/60 dark:bg-violet-950/30 px-3 text-xs font-medium hover:bg-violet-100/80 dark:hover:bg-violet-900/40 outline-none cursor-pointer transition-colors">
+                <div className="flex h-5 w-5 items-center justify-center rounded-full animated-bg text-white shadow-sm">
+                  <User className="h-3 w-3" />
                 </div>
-                <span className="hidden md:inline max-w-[120px] truncate text-xs font-medium">
+                <span className="hidden md:inline max-w-[120px] truncate text-xs font-medium text-violet-700 dark:text-violet-300">
                   {userEmail || 'Account'}
                 </span>
               </DropdownMenuTrigger>
@@ -133,7 +141,7 @@ export function Navbar() {
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-xs font-medium text-muted-foreground">Signed in as</p>
-                    <p className="truncate text-xs font-semibold text-foreground">
+                    <p className="truncate text-xs font-semibold gradient-text-static">
                       {userEmail || 'User'}
                     </p>
                   </div>
@@ -141,14 +149,14 @@ export function Navbar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => router.push('/dashboard')}
-                  className="cursor-pointer"
+                  className="cursor-pointer hover:text-violet-600 dark:hover:text-violet-400"
                 >
                   <LayoutDashboard className="mr-2 h-4 w-4" />
                   Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => router.push('/dashboard/upload')}
-                  className="cursor-pointer"
+                  className="cursor-pointer hover:text-violet-600 dark:hover:text-violet-400"
                 >
                   <PlusCircle className="mr-2 h-4 w-4" />
                   Upload Notes
@@ -157,7 +165,7 @@ export function Navbar() {
                 <DropdownMenuItem
                   onClick={handleLogout}
                   disabled={loggingOut}
-                  className="cursor-pointer text-foreground"
+                  className="cursor-pointer"
                 >
                   {loggingOut ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -172,13 +180,14 @@ export function Navbar() {
                   className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
-                  Delete account & data
+                  Delete account &amp; data
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
       </header>
+
 
       {/* Delete Account Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

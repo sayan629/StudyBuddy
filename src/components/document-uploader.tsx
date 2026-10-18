@@ -9,7 +9,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
 import { extractTextFromPdf, MAX_CHAR_LIMIT } from '@/lib/pdf-parser';
 import {
   UploadCloud,
@@ -202,28 +201,37 @@ export function DocumentUploader() {
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto shadow-md border-border/80">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold flex items-center gap-2">
-          <UploadCloud className="h-6 w-6 text-primary" />
-          Upload Study Material
-        </CardTitle>
-        <CardDescription>
-          Upload your lecture slides, textbook PDF, or markdown notes. Client-side extraction ensures quick, private processing.
-        </CardDescription>
+    <Card className="w-full max-w-4xl mx-auto rainbow-border-card border-0 shadow-2xl overflow-hidden relative">
+      <div className="absolute -top-20 -right-20 w-52 h-52 bg-violet-500/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-20 -left-20 w-52 h-52 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
+
+      <CardHeader className="relative z-10">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-cyan-500 text-white shadow-lg animate-float-1">
+            <UploadCloud className="h-6 w-6" />
+          </div>
+          <div>
+            <CardTitle className="text-2xl sm:text-3xl font-heading font-extrabold tracking-tight">
+              Upload <span className="text-gradient-rainbow">Study Material</span>
+            </CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Upload lecture slides, textbook PDFs, or markdown notes. Client-side extraction ensures instant, private processing.
+            </CardDescription>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative z-10">
         <Tabs
           value={activeTab}
           onValueChange={(val) => setActiveTab(val as 'file' | 'paste')}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-2 max-w-xs">
-            <TabsTrigger value="file" className="gap-2">
+          <TabsList className="grid w-full grid-cols-2 max-w-xs h-11 p-1 bg-muted/70 rounded-2xl border border-violet-400/20">
+            <TabsTrigger value="file" className="gap-2 font-heading font-semibold text-xs sm:text-sm rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
               <FileText className="h-4 w-4" />
               Upload File
             </TabsTrigger>
-            <TabsTrigger value="paste" className="gap-2">
+            <TabsTrigger value="paste" className="gap-2 font-heading font-semibold text-xs sm:text-sm rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
               <FileCode className="h-4 w-4" />
               Paste Text
             </TabsTrigger>
@@ -236,10 +244,10 @@ export function DocumentUploader() {
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[220px] ${
+              className={`border-2 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[220px] ${
                 isDragging
-                  ? 'border-primary bg-primary/5 scale-[1.01]'
-                  : 'border-border/80 hover:border-primary/50 hover:bg-muted/40'
+                  ? 'border-violet-500 bg-violet-500/10 scale-[1.02] shadow-xl'
+                  : 'border-violet-300/60 dark:border-violet-700/40 hover:border-violet-500/80 hover:bg-violet-50/30 dark:hover:bg-violet-950/20 shadow-sm'
               }`}
             >
               <input
@@ -250,25 +258,25 @@ export function DocumentUploader() {
                 className="hidden"
               />
 
-              <div className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3">
-                <UploadCloud className="h-6 w-6" />
+              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 text-white flex items-center justify-center mb-3 shadow-lg animate-float-1">
+                <UploadCloud className="h-7 w-7" />
               </div>
 
               {selectedFileName ? (
                 <div className="space-y-1">
-                  <p className="font-semibold text-sm text-foreground flex items-center justify-center gap-2">
+                  <p className="font-heading font-bold text-sm text-foreground flex items-center justify-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     {selectedFileName}
                   </p>
-                  <p className="text-xs text-muted-foreground">Click or drag another file to replace</p>
+                  <p className="text-xs text-muted-foreground font-mono">Click or drag another file to replace</p>
                 </div>
               ) : (
-                <div className="space-y-1">
-                  <p className="font-semibold text-sm text-foreground">
-                    Click to browse or drag and drop your file here
+                <div className="space-y-1.5">
+                  <p className="font-heading font-bold text-sm text-foreground">
+                    Click to browse or drag and drop your study file
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    Supports PDF, Markdown (.md), and Plain Text (.txt)
+                  <p className="text-xs text-muted-foreground font-mono">
+                    Supports <span className="text-rose-500 font-semibold">.pdf</span>, <span className="text-cyan-500 font-semibold">.md</span>, and <span className="text-emerald-500 font-semibold">.txt</span>
                   </p>
                 </div>
               )}
@@ -276,15 +284,20 @@ export function DocumentUploader() {
 
             {/* Extraction progress bar */}
             {isExtracting && (
-              <div className="space-y-2 p-4 rounded-lg bg-muted/60 border border-border">
-                <div className="flex justify-between text-xs font-medium">
-                  <span className="flex items-center gap-2 text-foreground">
-                    <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+              <div className="space-y-2 p-4 rounded-2xl bg-violet-500/10 border border-violet-400/30 backdrop-blur">
+                <div className="flex justify-between text-xs font-semibold">
+                  <span className="flex items-center gap-2 text-foreground font-heading">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-violet-500" />
                     {extractStatus}
                   </span>
-                  <span className="text-muted-foreground">{extractProgress}%</span>
+                  <span className="text-violet-600 dark:text-violet-400 font-mono font-bold">{extractProgress}%</span>
                 </div>
-                <Progress value={extractProgress} className="h-2" />
+                <div className="w-full h-2.5 bg-muted rounded-full overflow-hidden">
+                  <div
+                    className="h-full gradient-rainbow transition-all duration-300"
+                    style={{ width: `${extractProgress}%` }}
+                  />
+                </div>
               </div>
             )}
 
@@ -333,21 +346,22 @@ export function DocumentUploader() {
 
         {/* Form Submission fields */}
         {rawText && (
-          <form onSubmit={handleSubmit} className="mt-6 pt-6 border-t border-border space-y-4">
+          <form onSubmit={handleSubmit} className="mt-6 pt-6 border-t border-border/40 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="doc-title">Document Title</Label>
+              <Label htmlFor="doc-title" className="font-heading font-semibold text-sm">Document Title</Label>
               <Input
                 id="doc-title"
-                placeholder="e.g. Biology 101 - Cellular Respiration"
+                placeholder="e.g. Biology 101 — Cellular Respiration"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                className="rounded-xl border-violet-300/40 dark:border-violet-700/40 focus-visible:ring-violet-500 h-11 text-sm bg-background/80"
                 required
               />
             </div>
 
-            <div className="flex items-center justify-between text-xs text-muted-foreground pt-1">
-              <span className="flex items-center gap-1.5">
-                <Info className="h-3.5 w-3.5 text-primary" />
+            <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 font-mono">
+              <span className="flex items-center gap-1.5 text-violet-600 dark:text-violet-400 font-sans font-medium">
+                <Info className="h-3.5 w-3.5" />
                 Ready to generate AI summary, flashcards, and quizzes
               </span>
               <span>{rawText.length.toLocaleString()} characters extracted</span>
@@ -357,6 +371,7 @@ export function DocumentUploader() {
               <Button
                 type="button"
                 variant="outline"
+                className="rounded-xl"
                 onClick={() => {
                   setRawText('');
                   setSelectedFileName(null);
@@ -368,11 +383,15 @@ export function DocumentUploader() {
               >
                 Clear
               </Button>
-              <Button type="submit" disabled={isSubmitting || !title.trim()} className="gap-2">
+              <Button
+                type="submit"
+                disabled={isSubmitting || !title.trim()}
+                className="gradient-cosmic shimmer-button text-white font-heading font-bold gap-2 h-11 px-7 rounded-xl shadow-lg hover:opacity-95 transition-all"
+              >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Saving...
+                    Saving Study Notes...
                   </>
                 ) : (
                   <>

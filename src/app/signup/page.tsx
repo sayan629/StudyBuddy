@@ -94,39 +94,44 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-muted/30">
-      <div className="absolute top-4 right-4">
+    <div className="relative min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-background overflow-hidden">
+      {/* Background Decorative Aura Blobs */}
+      <div className="aura-blob blob-purple w-96 h-96 -top-20 -left-20" />
+      <div className="aura-blob blob-cyan w-96 h-96 -bottom-20 -right-20" />
+      <div className="aura-blob blob-pink w-80 h-80 top-1/2 left-10" />
+
+      <div className="absolute top-4 right-4 z-20">
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-md space-y-6 relative z-10">
         <div className="flex flex-col items-center text-center space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2 font-bold text-2xl tracking-tight">
-            <div className="p-2 bg-primary text-primary-foreground rounded-xl shadow-md">
+          <Link href="/" className="inline-flex items-center gap-2.5 font-heading font-extrabold text-2xl tracking-tight">
+            <div className="p-2 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-cyan-500 text-white shadow-xl animate-float-1">
               <BookOpen className="h-6 w-6" />
             </div>
-            <span>StudyBuddy</span>
+            <span className="text-gradient-rainbow">StudyBuddy</span>
           </Link>
-          <p className="text-sm text-muted-foreground">Your AI-powered study companion</p>
+          <p className="text-xs text-muted-foreground font-sans">Your AI-powered study assistant</p>
         </div>
 
-        <Card className="shadow-lg border-border/80">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-xl font-semibold">Create an account</CardTitle>
-            <CardDescription>
-              Start mastering your notes with AI summaries, flashcards, and quizzes
+        <Card className="rainbow-border-card border-0 shadow-2xl overflow-hidden relative">
+          <CardHeader className="space-y-1 pb-4">
+            <CardTitle className="text-2xl font-heading font-extrabold tracking-tight">Create an account</CardTitle>
+            <CardDescription className="text-xs">
+              Start mastering notes with AI summaries, flashcards, and quizzes
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
-              <Alert variant="destructive" className="py-2.5">
+              <Alert variant="destructive" className="py-2.5 rounded-xl">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription className="text-xs leading-relaxed">{error}</AlertDescription>
               </Alert>
             )}
 
             {successMessage && (
-              <Alert className="py-2.5 border-emerald-500/50 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300">
+              <Alert className="py-2.5 border-emerald-500/50 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 rounded-xl">
                 <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 <AlertDescription className="text-xs leading-relaxed">{successMessage}</AlertDescription>
               </Alert>
@@ -135,12 +140,12 @@ export default function SignUpPage() {
             <Button
               type="button"
               variant="outline"
-              className="w-full h-10 font-medium"
+              className="w-full h-11 font-heading font-semibold rounded-xl border-violet-300/40 dark:border-violet-700/40 hover:bg-muted/60 transition-all shadow-xs"
               onClick={handleGoogleSignUp}
               disabled={googleLoading || loading}
             >
               {googleLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin text-violet-500" />
               ) : (
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                   <path
@@ -164,24 +169,25 @@ export default function SignUpPage() {
               Sign up with Google
             </Button>
 
-            <div className="relative">
+            <div className="relative my-2">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-border" />
+                <span className="w-full border-t border-border/40" />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
+              <div className="relative flex justify-center text-[11px] font-mono uppercase tracking-wider">
                 <span className="bg-card px-2 text-muted-foreground">Or with email</span>
               </div>
             </div>
 
             <form onSubmit={handleEmailSignUp} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="signup-email">Email</Label>
+                <Label htmlFor="signup-email" className="font-heading font-semibold text-xs">Email</Label>
                 <Input
                   id="signup-email"
                   type="email"
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="rounded-xl border-violet-300/40 dark:border-violet-700/40 h-10 text-xs focus-visible:ring-violet-500"
                   required
                   autoComplete="email"
                   disabled={loading || googleLoading}
@@ -189,13 +195,14 @@ export default function SignUpPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="signup-password">Password</Label>
+                <Label htmlFor="signup-password" className="font-heading font-semibold text-xs">Password</Label>
                 <Input
                   id="signup-password"
                   type="password"
                   placeholder="At least 6 characters"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className="rounded-xl border-violet-300/40 dark:border-violet-700/40 h-10 text-xs focus-visible:ring-violet-500"
                   required
                   autoComplete="new-password"
                   disabled={loading || googleLoading}
@@ -203,29 +210,34 @@ export default function SignUpPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirm Password</Label>
+                <Label htmlFor="confirm-password" className="font-heading font-semibold text-xs">Confirm Password</Label>
                 <Input
                   id="confirm-password"
                   type="password"
                   placeholder="Re-enter your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="rounded-xl border-violet-300/40 dark:border-violet-700/40 h-10 text-xs focus-visible:ring-violet-500"
                   required
                   autoComplete="new-password"
                   disabled={loading || googleLoading}
                 />
               </div>
 
-              <Button type="submit" className="w-full h-10 font-medium" disabled={loading || googleLoading}>
+              <Button
+                type="submit"
+                className="w-full h-11 gradient-cosmic shimmer-button text-white font-heading font-bold rounded-xl shadow-lg hover:opacity-95 transition-all"
+                disabled={loading || googleLoading}
+              >
                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Create account
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="flex justify-center border-t border-border pt-4">
-            <p className="text-xs text-muted-foreground">
+          <CardFooter className="flex justify-center border-t border-border/40 pt-4">
+            <p className="text-xs text-muted-foreground font-sans">
               Already have an account?{' '}
-              <Link href="/login" className="text-primary font-semibold hover:underline underline-offset-4">
+              <Link href="/login" className="text-violet-600 dark:text-violet-400 font-bold hover:underline underline-offset-4">
                 Sign in
               </Link>
             </p>

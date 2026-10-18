@@ -109,17 +109,22 @@ export default async function DocumentStudyPage(props: {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background selection:bg-primary/20 selection:text-primary">
+    <div className="min-h-screen flex flex-col bg-background relative overflow-x-hidden">
+      {/* Background Decorative Aura Blobs */}
+      <div className="aura-blob blob-purple w-96 h-96 -top-20 -left-20" />
+      <div className="aura-blob blob-cyan w-96 h-96 top-1/2 -right-20" />
+      <div className="aura-blob blob-pink w-80 h-80 bottom-10 left-1/3" />
+
       <Navbar />
 
-      <main className="flex-1 container mx-auto max-w-6xl px-4 py-8 sm:px-8 space-y-6">
+      <main className="flex-1 container mx-auto max-w-6xl px-4 py-8 sm:px-8 space-y-6 relative z-10">
         {/* Navigation & Document Title Header */}
-        <div className="space-y-3">
+        <div className="space-y-3 glass-panel p-6 rounded-3xl border border-violet-400/20 shadow-md">
           <Link href="/dashboard">
             <Button
               variant="ghost"
               size="sm"
-              className="gap-1.5 text-muted-foreground hover:text-foreground -ml-2"
+              className="gap-1.5 text-muted-foreground hover:text-foreground -ml-2 rounded-xl"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Dashboard
@@ -127,20 +132,20 @@ export default async function DocumentStudyPage(props: {
           </Link>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
-            <div className="space-y-1">
+            <div className="space-y-2">
               <div className="flex items-center gap-2 flex-wrap">
-                <Badge variant="secondary" className="uppercase text-[11px] font-bold">
+                <Badge className="uppercase text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-lg bg-gradient-to-r from-violet-500 to-indigo-600 text-white shadow-sm">
                   {document.source_type}
                 </Badge>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground font-mono">
                   Added {new Date(document.created_at).toLocaleDateString()}
                 </span>
                 <span className="text-xs text-muted-foreground">•</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs font-mono font-semibold text-violet-600 dark:text-violet-400">
                   {document.raw_text.length.toLocaleString()} characters
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              <h1 className="text-2xl sm:text-4xl font-heading font-extrabold tracking-tight">
                 {document.title}
               </h1>
             </div>
@@ -149,23 +154,36 @@ export default async function DocumentStudyPage(props: {
 
         {/* 3 Study Tabs: Summary | Flashcards | Quiz */}
         <Tabs defaultValue="summary" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 max-w-md h-11 p-1 bg-muted/80">
-            <TabsTrigger value="summary" className="gap-2 text-xs sm:text-sm font-medium">
-              <BookOpen className="h-4 w-4 text-primary" />
+          <TabsList className="grid w-full grid-cols-3 max-w-md h-12 p-1.5 bg-muted/70 rounded-2xl border border-violet-400/20 backdrop-blur shadow-sm">
+            <TabsTrigger
+              value="summary"
+              className="gap-2 text-xs sm:text-sm font-heading font-bold rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+            >
+              <BookOpen className="h-4 w-4" />
               Summary
             </TabsTrigger>
-            <TabsTrigger value="flashcards" className="gap-2 text-xs sm:text-sm font-medium">
-              <Layers className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+            <TabsTrigger
+              value="flashcards"
+              className="gap-2 text-xs sm:text-sm font-heading font-bold rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+            >
+              <Layers className="h-4 w-4" />
               Flashcards
               {flashcards && flashcards.length > 0 && (
-                <span className="ml-1 text-[11px] opacity-70">({flashcards.length})</span>
+                <span className="ml-1 text-[11px] font-mono px-1.5 py-0.2 rounded-full bg-white/20">
+                  {flashcards.length}
+                </span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="quiz" className="gap-2 text-xs sm:text-sm font-medium">
-              <CheckSquare className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <TabsTrigger
+              value="quiz"
+              className="gap-2 text-xs sm:text-sm font-heading font-bold rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+            >
+              <CheckSquare className="h-4 w-4" />
               Quiz
               {questions.length > 0 && (
-                <span className="ml-1 text-[11px] opacity-70">({questions.length})</span>
+                <span className="ml-1 text-[11px] font-mono px-1.5 py-0.2 rounded-full bg-white/20">
+                  {questions.length}
+                </span>
               )}
             </TabsTrigger>
           </TabsList>

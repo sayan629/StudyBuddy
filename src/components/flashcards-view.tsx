@@ -4,7 +4,6 @@ import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -321,32 +320,35 @@ export function FlashcardsView({
             /* Active Flashcard View */
             <div className="max-w-2xl mx-auto space-y-4">
               {/* Progress info */}
-              <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
-                <span>
-                  Card {currentIndex + 1} of {filteredCards.length}
+              <div className="flex items-center justify-between text-xs text-muted-foreground px-1 font-mono">
+                <span className="font-heading font-semibold text-foreground">
+                  Card {currentIndex + 1} <span className="text-muted-foreground font-normal">of {filteredCards.length}</span>
                 </span>
-                <div className="flex items-center gap-3">
-                  <Badge variant="outline" className="capitalize text-[11px]">
+                <div className="flex items-center gap-2">
+                  <Badge className="capitalize text-[10px] font-mono px-2 py-0.5 rounded-lg bg-violet-500/15 text-violet-600 dark:text-violet-400 border border-violet-400/30">
                     {currentCard?.difficulty || 'Medium'}
                   </Badge>
-                  <span>
-                    Streak: {currentCard?.times_correct || 0} correct
+                  <span className="text-[11px] font-display text-amber-500 font-bold">
+                    🔥 {currentCard?.times_correct || 0} streak
                   </span>
                 </div>
               </div>
 
-              <Progress
-                value={((currentIndex + 1) / filteredCards.length) * 100}
-                className="h-1.5"
-              />
+              {/* Animated Rainbow Progress Bar */}
+              <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full gradient-rainbow transition-all duration-300"
+                  style={{ width: `${((currentIndex + 1) / filteredCards.length) * 100}%` }}
+                />
+              </div>
 
               {/* 3D Flip Card Container */}
               <div
-                className="perspective-1000 cursor-pointer min-h-[300px] select-none"
+                className="perspective-1000 cursor-pointer min-h-[320px] select-none py-2"
                 onClick={() => setIsFlipped(!isFlipped)}
               >
                 <div
-                  className={`relative w-full h-[300px] transition-transform duration-500 rounded-2xl transform-style-3d shadow-md hover:shadow-lg border border-border bg-card p-6 flex flex-col justify-between ${
+                  className={`relative w-full h-[320px] transition-transform duration-500 rounded-3xl transform-style-3d shadow-xl hover:shadow-2xl rainbow-border-card border-0 p-8 flex flex-col justify-between overflow-hidden ${
                     isFlipped ? 'rotate-y-180 bg-muted/40' : ''
                   }`}
                   style={{
@@ -359,22 +361,25 @@ export function FlashcardsView({
                     className="absolute inset-0 p-8 flex flex-col justify-between backface-hidden"
                     style={{ backfaceVisibility: 'hidden' }}
                   >
-                    <div className="flex justify-between items-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                      <span>Question</span>
-                      <span className="text-[11px] font-normal lowercase text-muted-foreground">
-                        Click card or press Space to reveal
+                    <div className="flex justify-between items-center text-xs font-heading font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider">
+                      <span className="flex items-center gap-1.5">
+                        <Sparkles className="h-3.5 w-3.5" />
+                        Prompt Question
+                      </span>
+                      <span className="text-[11px] font-mono lowercase text-muted-foreground bg-muted/60 px-2 py-0.5 rounded-md">
+                        Press Space to flip
                       </span>
                     </div>
 
                     <div className="my-auto text-center px-4">
-                      <p className="text-lg sm:text-xl font-medium leading-relaxed text-foreground">
+                      <p className="font-heading text-xl sm:text-2xl font-bold leading-relaxed text-foreground">
                         {currentCard?.question}
                       </p>
                     </div>
 
-                    <div className="text-center text-xs text-muted-foreground flex items-center justify-center gap-1.5">
-                      <RotateCw className="h-3.5 w-3.5" />
-                      Tap card to flip
+                    <div className="text-center text-xs text-muted-foreground flex items-center justify-center gap-2 font-mono">
+                      <RotateCw className="h-3.5 w-3.5 animate-spin-slow text-violet-500" />
+                      <span>Click anywhere to reveal answer</span>
                     </div>
                   </div>
 
@@ -386,21 +391,24 @@ export function FlashcardsView({
                       transform: 'rotateY(180deg)',
                     }}
                   >
-                    <div className="flex justify-between items-center text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-                      <span>Answer</span>
-                      <span className="text-[11px] font-normal lowercase text-muted-foreground">
+                    <div className="flex justify-between items-center text-xs font-heading font-bold text-emerald-500 uppercase tracking-wider">
+                      <span className="flex items-center gap-1.5">
+                        <CheckCircle2 className="h-4 w-4" />
+                        Answer
+                      </span>
+                      <span className="text-[11px] font-mono lowercase text-muted-foreground bg-muted/60 px-2 py-0.5 rounded-md">
                         Rate your recall below
                       </span>
                     </div>
 
                     <div className="my-auto text-center px-4">
-                      <p className="text-base sm:text-lg leading-relaxed text-foreground font-normal">
+                      <p className="font-sans text-base sm:text-xl leading-relaxed text-foreground font-medium">
                         {currentCard?.answer}
                       </p>
                     </div>
 
-                    <div className="text-center text-xs text-muted-foreground flex items-center justify-center gap-1.5">
-                      <span>Next review: +{currentCard?.times_correct === 0 ? '1d' : currentCard?.times_correct === 1 ? '3d' : '7d'} if got it</span>
+                    <div className="text-center text-xs text-muted-foreground flex items-center justify-center gap-1.5 font-mono">
+                      <span>Interval next: +{currentCard?.times_correct === 0 ? '1d' : currentCard?.times_correct === 1 ? '3d' : '7d'} if mastered</span>
                     </div>
                   </div>
                 </div>
@@ -418,7 +426,7 @@ export function FlashcardsView({
                     }
                   }}
                   disabled={currentIndex === 0 || submittingReview}
-                  className="gap-1.5 text-xs text-muted-foreground"
+                  className="gap-1.5 text-xs text-muted-foreground rounded-xl"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
                   Previous
@@ -431,29 +439,30 @@ export function FlashcardsView({
                       size="default"
                       onClick={() => handleReview('wrong')}
                       disabled={submittingReview}
-                      className="border-rose-500/40 text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 gap-1.5 font-medium px-4"
+                      className="border-rose-500/40 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white gap-1.5 font-heading font-bold px-5 rounded-xl shadow-sm transition-all"
                       title="Shortcut: Press '1' or Left Arrow"
                     >
                       <X className="h-4 w-4" />
-                      Missed it (1)
+                      Missed it
+                      <span className="font-mono text-[10px] opacity-70 ml-1">[1]</span>
                     </Button>
                     <Button
-                      variant="default"
                       size="default"
                       onClick={() => handleReview('correct')}
                       disabled={submittingReview}
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 font-medium px-4"
+                      className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white gap-1.5 font-heading font-bold px-5 rounded-xl shadow-md hover:opacity-95 transition-all"
                       title="Shortcut: Press '2' or Right Arrow"
                     >
                       <Check className="h-4 w-4" />
-                      Got it (2)
+                      Got it!
+                      <span className="font-mono text-[10px] opacity-80 ml-1">[2]</span>
                     </Button>
                   </div>
                 ) : (
                   <Button
                     variant="outline"
                     onClick={() => setIsFlipped(true)}
-                    className="gap-2 px-6"
+                    className="gap-2 px-6 rounded-xl font-heading font-semibold border-violet-400/40 hover:bg-violet-500 hover:text-white transition-all shadow-sm"
                   >
                     <RotateCw className="h-4 w-4" />
                     Flip Card (Space)

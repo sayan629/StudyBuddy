@@ -29,6 +29,8 @@ import {
   ArrowRight,
   Sparkles,
   Loader2,
+  Lightbulb,
+  Zap,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -119,128 +121,183 @@ export default function DashboardPage() {
     doc.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const getSourceBadgeStyle = (type: string) => {
+    switch (type) {
+      case 'pdf':
+        return 'bg-gradient-to-r from-rose-500 to-red-600 text-white font-mono shadow-sm';
+      case 'md':
+        return 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-mono shadow-sm';
+      case 'txt':
+        return 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-mono shadow-sm';
+      case 'paste':
+        return 'bg-gradient-to-r from-amber-500 to-orange-600 text-white font-mono shadow-sm';
+      default:
+        return 'bg-secondary text-secondary-foreground font-mono';
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-background selection:bg-primary/20 selection:text-primary">
+    <div className="min-h-screen flex flex-col bg-background relative overflow-x-hidden">
+      {/* Background Decorative Aura Blobs */}
+      <div className="aura-blob blob-purple w-96 h-96 -top-20 -left-20" />
+      <div className="aura-blob blob-cyan w-96 h-96 top-1/3 -right-20" />
+      <div className="aura-blob blob-pink w-80 h-80 bottom-20 left-1/4" />
+
       <Navbar />
 
-      <main className="flex-1 container mx-auto max-w-7xl px-4 py-8 sm:px-8 space-y-8">
-        {/* Welcome & Quick Action */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-extrabold tracking-tight">Study Dashboard</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Your AI-generated summaries, spaced repetition cards, and performance metrics
+      <main className="flex-1 container mx-auto max-w-7xl px-4 py-8 sm:px-8 space-y-8 relative z-10">
+        {/* Welcome & Quick Action Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-panel p-6 rounded-3xl border border-violet-400/20 shadow-lg">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400 text-xs font-semibold mb-1">
+              <Sparkles className="h-3.5 w-3.5 text-violet-500" />
+              <span>Smart Study Space</span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight">
+              Study <span className="text-gradient-rainbow">Dashboard</span>
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Your AI-generated summaries, spaced repetition cards, and performance curves
             </p>
           </div>
+
           <Link href="/dashboard/upload">
-            <Button className="gap-2 shadow-sm">
+            <Button className="gradient-cosmic shimmer-button text-white font-semibold shadow-lg hover:opacity-95 transition-all gap-2 h-11 px-6 rounded-2xl">
               <PlusCircle className="h-4 w-4" />
               Upload Material
             </Button>
           </Link>
         </div>
 
-        {/* 4 Stat Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1: Due Today */}
-          <Card className="border-border/80 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Cards Due Today
-              </CardTitle>
-              <div className="p-2 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-lg">
-                <Calendar className="h-4 w-4" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <Skeleton className="h-8 w-16" />
-              ) : (
-                <div className="flex items-baseline justify-between">
-                  <div className="text-2xl font-bold">{stats?.cardsDueToday ?? 0}</div>
-                  <span className="text-xs text-muted-foreground">
-                    of {stats?.totalCards ?? 0} total
-                  </span>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Card 2: Average Quiz Score */}
-          <Card className="border-border/80 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Avg Quiz Score
-              </CardTitle>
-              <div className="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg">
-                <Award className="h-4 w-4" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <Skeleton className="h-8 w-16" />
-              ) : (
-                <div className="flex items-baseline justify-between">
-                  <div className="text-2xl font-bold">{stats?.averageQuizScore ?? 0}%</div>
-                  <span className="text-xs text-muted-foreground">
-                    {stats?.totalQuizzesTaken ?? 0} attempt{stats?.totalQuizzesTaken === 1 ? '' : 's'}
-                  </span>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Card 3: Study Streak */}
-          <Card className="border-border/80 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Study Streak
-              </CardTitle>
-              <div className="p-2 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-lg">
-                <Flame className="h-4 w-4" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <Skeleton className="h-8 w-16" />
-              ) : (
-                <div className="flex items-baseline justify-between">
-                  <div className="text-2xl font-bold">
-                    {stats?.studyStreak ?? 0} {stats?.studyStreak === 1 ? 'day' : 'days'}
+        {/* Motivation Sticky Note (Handwritten Font Showcase) */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+          <div className="md:col-span-3">
+            {/* 4 Stat Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Card 1: Due Today */}
+              <Card className="rainbow-border-card border-0 shadow-md hover:shadow-xl transition-all">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                  <CardTitle className="text-xs font-heading font-semibold text-muted-foreground uppercase tracking-wider">
+                    Due Today
+                  </CardTitle>
+                  <div className="p-2.5 bg-gradient-to-br from-purple-500 to-indigo-600 text-white rounded-xl shadow-md animate-float-1">
+                    <Calendar className="h-4 w-4" />
                   </div>
-                  <span className="text-xs text-muted-foreground">Keep it up!</span>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <Skeleton className="h-8 w-16" />
+                  ) : (
+                    <div className="flex items-baseline justify-between">
+                      <div className="font-display text-3xl font-extrabold text-purple-600 dark:text-purple-400">
+                        {stats?.cardsDueToday ?? 0}
+                      </div>
+                      <span className="text-xs font-mono text-muted-foreground">
+                        of {stats?.totalCards ?? 0} cards
+                      </span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
-          {/* Card 4: Documents in Library */}
-          <Card className="border-border/80 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Document Library
-              </CardTitle>
-              <div className="p-2 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg">
-                <BookOpen className="h-4 w-4" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <Skeleton className="h-8 w-16" />
-              ) : (
-                <div className="flex items-baseline justify-between">
-                  <div className="text-2xl font-bold">{stats?.totalDocuments ?? 0}</div>
-                  <span className="text-xs text-muted-foreground">Saved sets</span>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+              {/* Card 2: Average Quiz Score */}
+              <Card className="rainbow-border-card border-0 shadow-md hover:shadow-xl transition-all">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                  <CardTitle className="text-xs font-heading font-semibold text-muted-foreground uppercase tracking-wider">
+                    Avg Quiz Score
+                  </CardTitle>
+                  <div className="p-2.5 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl shadow-md animate-float-2">
+                    <Award className="h-4 w-4" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <Skeleton className="h-8 w-16" />
+                  ) : (
+                    <div className="flex items-baseline justify-between">
+                      <div className="font-display text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">
+                        {stats?.averageQuizScore ?? 0}%
+                      </div>
+                      <span className="text-xs font-mono text-muted-foreground">
+                        {stats?.totalQuizzesTaken ?? 0} attempt{stats?.totalQuizzesTaken === 1 ? '' : 's'}
+                      </span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Card 3: Study Streak */}
+              <Card className="rainbow-border-card border-0 shadow-md hover:shadow-xl transition-all">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                  <CardTitle className="text-xs font-heading font-semibold text-muted-foreground uppercase tracking-wider">
+                    Study Streak
+                  </CardTitle>
+                  <div className="p-2.5 bg-gradient-to-br from-amber-500 to-rose-500 text-white rounded-xl shadow-md animate-bounce-subtle">
+                    <Flame className="h-4 w-4" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <Skeleton className="h-8 w-16" />
+                  ) : (
+                    <div className="flex items-baseline justify-between">
+                      <div className="font-display text-3xl font-extrabold text-amber-500 dark:text-amber-400">
+                        {stats?.studyStreak ?? 0}
+                      </div>
+                      <span className="text-xs font-display font-medium text-muted-foreground">
+                        {stats?.studyStreak === 1 ? 'day active' : 'days fire 🔥'}
+                      </span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Card 4: Documents in Library */}
+              <Card className="rainbow-border-card border-0 shadow-md hover:shadow-xl transition-all">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                  <CardTitle className="text-xs font-heading font-semibold text-muted-foreground uppercase tracking-wider">
+                    Library
+                  </CardTitle>
+                  <div className="p-2.5 bg-gradient-to-br from-cyan-500 to-blue-600 text-white rounded-xl shadow-md animate-float-1">
+                    <BookOpen className="h-4 w-4" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <Skeleton className="h-8 w-16" />
+                  ) : (
+                    <div className="flex items-baseline justify-between">
+                      <div className="font-display text-3xl font-extrabold text-cyan-600 dark:text-cyan-400">
+                        {stats?.totalDocuments ?? 0}
+                      </div>
+                      <span className="text-xs font-mono text-muted-foreground">saved docs</span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Handwritten Study Note Widget */}
+          <div className="sticky-note p-4 rounded-2xl flex flex-col justify-between space-y-2 h-full min-h-[140px]">
+            <div className="flex items-center gap-1.5 font-bold text-xs uppercase tracking-wider opacity-80">
+              <Lightbulb className="h-3.5 w-3.5" />
+              <span>Study Buddy Note</span>
+            </div>
+            <p className="font-handwritten text-xl leading-tight font-bold">
+              &quot;Reviewing flashcards within 24 hours locks in 70% more knowledge!&quot;
+            </p>
+            <div className="text-[11px] font-mono opacity-70 flex items-center gap-1">
+              <Zap className="h-3 w-3" />
+              <span>Keep your streak glowing!</span>
+            </div>
+          </div>
         </div>
 
         {/* Chart Section */}
         <div>
           {loading ? (
-            <Card className="border-border/80">
+            <Card className="rainbow-border-card border-0">
               <CardHeader>
                 <Skeleton className="h-6 w-48" />
               </CardHeader>
@@ -257,28 +314,30 @@ export default function DashboardPage() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl font-bold tracking-tight">Your Study Documents</h2>
+              <h2 className="text-2xl font-heading font-extrabold tracking-tight">
+                Your Study Materials
+              </h2>
               <p className="text-xs text-muted-foreground">
-                Select a document to study summaries, flashcards, or take a quiz
+                Select a document to review summaries, practice spaced repetition flashcards, or take a quiz
               </p>
             </div>
 
             {/* Search Input */}
             <div className="relative w-full sm:w-72">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-violet-500" />
               <Input
-                placeholder="Search documents..."
+                placeholder="Search study documents..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-9 text-xs"
+                className="pl-9 h-10 text-xs rounded-xl border-violet-300/40 dark:border-violet-700/40 focus-visible:ring-violet-500 bg-background/80 backdrop-blur"
               />
             </div>
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {Array.from({ length: 3 }).map((_, i) => (
-                <Card key={i} className="border-border/80">
+                <Card key={i} className="rainbow-border-card border-0 p-4">
                   <CardHeader>
                     <Skeleton className="h-5 w-3/4" />
                     <Skeleton className="h-3 w-1/2" />
@@ -290,20 +349,22 @@ export default function DashboardPage() {
               ))}
             </div>
           ) : filteredDocuments.length === 0 ? (
-            <Card className="border-dashed border-2 py-12 text-center">
+            <Card className="border-dashed border-2 border-violet-400/30 rounded-3xl py-12 text-center bg-card/40 backdrop-blur">
               <CardContent className="flex flex-col items-center justify-center space-y-3">
-                <FileText className="h-10 w-10 text-muted-foreground/60" />
-                <h3 className="font-semibold text-lg">
-                  {searchQuery ? 'No documents match your search' : 'No documents uploaded yet'}
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-cyan-500/20 flex items-center justify-center text-violet-500 animate-bounce-subtle">
+                  <FileText className="h-7 w-7" />
+                </div>
+                <h3 className="font-heading font-bold text-lg">
+                  {searchQuery ? 'No documents match your search' : 'No study materials uploaded yet'}
                 </h3>
                 <p className="text-xs text-muted-foreground max-w-sm">
                   {searchQuery
                     ? 'Try searching with another keyword.'
-                    : 'Upload your first PDF or lecture notes to generate AI summaries, flashcards, and quizzes.'}
+                    : 'Upload your lecture PDF, markdown notes, or pasted textbook text to instantly generate AI summaries and interactive cards.'}
                 </p>
                 {!searchQuery && (
                   <Link href="/dashboard/upload" className="pt-2">
-                    <Button size="sm" className="gap-2">
+                    <Button size="sm" className="gradient-cosmic text-white font-semibold gap-2 rounded-xl shadow-md">
                       <PlusCircle className="h-4 w-4" />
                       Upload Notes Now
                     </Button>
@@ -312,21 +373,21 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {filteredDocuments.map((doc) => (
                 <Card
                   key={doc.id}
-                  className="group border-border/80 hover:border-primary/50 transition-all hover:shadow-md flex flex-col justify-between"
+                  className="group rainbow-border-card interactive-card border-0 flex flex-col justify-between overflow-hidden shadow-md"
                 >
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between gap-2">
-                      <Badge variant="secondary" className="uppercase text-[10px] font-bold">
+                      <Badge className={`uppercase text-[10px] font-bold px-2 py-0.5 rounded-lg ${getSourceBadgeStyle(doc.source_type)}`}>
                         {doc.source_type}
                       </Badge>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-70 group-hover:opacity-100"
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
                         onClick={(e) => {
                           e.stopPropagation();
                           setDocToDelete(doc);
@@ -336,10 +397,10 @@ export default function DashboardPage() {
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
-                    <CardTitle className="text-base font-semibold leading-snug line-clamp-2 mt-2">
+                    <CardTitle className="font-heading text-base font-bold leading-snug line-clamp-2 mt-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
                       {doc.title}
                     </CardTitle>
-                    <CardDescription className="text-xs">
+                    <CardDescription className="text-xs font-mono">
                       Uploaded {new Date(doc.created_at).toLocaleDateString()}
                     </CardDescription>
                   </CardHeader>
@@ -347,21 +408,25 @@ export default function DashboardPage() {
                   <CardContent className="pb-3">
                     <div className="flex items-center gap-2">
                       {doc.summary ? (
-                        <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                        <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-semibold font-display">
                           <Sparkles className="h-3.5 w-3.5" />
                           Summary Ready
                         </span>
                       ) : (
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-muted-foreground font-sans">
                           Ready for AI analysis
                         </span>
                       )}
                     </div>
                   </CardContent>
 
-                  <CardFooter className="pt-2 border-t border-border/50">
+                  <CardFooter className="pt-2 border-t border-border/40">
                     <Link href={`/documents/${doc.id}`} className="w-full">
-                      <Button variant="outline" size="sm" className="w-full gap-1.5 justify-between font-medium">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full gap-1.5 justify-between font-semibold rounded-xl border-violet-300/40 dark:border-violet-700/40 hover:bg-gradient-to-r hover:from-violet-500 hover:to-indigo-600 hover:text-white transition-all shadow-sm"
+                      >
                         Study Notes
                         <ArrowRight className="h-3.5 w-3.5" />
                       </Button>
@@ -376,11 +441,13 @@ export default function DashboardPage() {
 
       {/* Delete Document Confirmation Modal */}
       <Dialog open={Boolean(docToDelete)} onOpenChange={(open) => !open && setDocToDelete(null)}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md rounded-3xl border border-destructive/20 bg-background/95 backdrop-blur-xl">
           <DialogHeader>
-            <DialogTitle className="text-destructive flex items-center gap-2">
-              <Trash2 className="h-5 w-5" />
-              Delete document?
+            <DialogTitle className="text-destructive font-heading flex items-center gap-2">
+              <div className="p-2 bg-destructive/10 rounded-xl">
+                <Trash2 className="h-5 w-5" />
+              </div>
+              Delete study document?
             </DialogTitle>
             <DialogDescription className="text-sm pt-2">
               Are you sure you want to delete <strong>&quot;{docToDelete?.title}&quot;</strong>? This will permanently remove all associated AI summaries, flashcards, practice quizzes, and quiz attempt scores.
@@ -391,6 +458,7 @@ export default function DashboardPage() {
               variant="outline"
               onClick={() => setDocToDelete(null)}
               disabled={deleting}
+              className="rounded-xl"
             >
               Cancel
             </Button>
@@ -398,6 +466,7 @@ export default function DashboardPage() {
               variant="destructive"
               onClick={handleDeleteDocument}
               disabled={deleting}
+              className="rounded-xl"
             >
               {deleting ? (
                 <>
@@ -405,7 +474,7 @@ export default function DashboardPage() {
                   Deleting...
                 </>
               ) : (
-                'Delete Document'
+                'Permanently Delete'
               )}
             </Button>
           </DialogFooter>
@@ -414,4 +483,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

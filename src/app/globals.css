@@ -8,8 +8,10 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-heading);
+  --font-display: var(--font-display);
+  --font-handwritten: var(--font-handwritten);
+  --font-mono: var(--font-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,83 +50,367 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ================================================================
+   LIGHT MODE — Electric Cosmic Violet, Radiant Cyan & Fuchsia
+   ================================================================ */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: oklch(0.985 0.008 280);
+  --foreground: oklch(0.16 0.04 285);
+  --card: oklch(0.995 0.005 280 / 0.85);
+  --card-foreground: oklch(0.16 0.04 285);
+  --popover: oklch(0.995 0.005 280);
+  --popover-foreground: oklch(0.16 0.04 285);
+  --primary: oklch(0.56 0.25 295);          /* Electric Purple/Violet */
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0.04 280);
+  --secondary-foreground: oklch(0.32 0.14 290);
+  --muted: oklch(0.95 0.015 280);
+  --muted-foreground: oklch(0.50 0.05 280);
+  --accent: oklch(0.92 0.08 310);
+  --accent-foreground: oklch(0.28 0.16 300);
+  --destructive: oklch(0.60 0.25 25);
+  --border: oklch(0.88 0.03 285);
+  --input: oklch(0.90 0.03 285);
+  --ring: oklch(0.58 0.24 295);
+  --chart-1: oklch(0.62 0.26 295);   /* Violet */
+  --chart-2: oklch(0.65 0.22 220);   /* Electric Cyan */
+  --chart-3: oklch(0.70 0.20 150);   /* Emerald */
+  --chart-4: oklch(0.75 0.20 60);    /* Sunset Amber */
+  --chart-5: oklch(0.65 0.26 345);   /* Hot Pink */
+  --radius: 0.875rem;
+  --sidebar: oklch(0.98 0.01 280);
+  --sidebar-foreground: oklch(0.16 0.04 285);
+  --sidebar-primary: oklch(0.56 0.25 295);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.92 0.08 310);
+  --sidebar-accent-foreground: oklch(0.28 0.16 300);
+  --sidebar-border: oklch(0.88 0.03 285);
+  --sidebar-ring: oklch(0.58 0.24 295);
 }
 
+/* ================================================================
+   DARK MODE — Cyber-Neon Deep Space: Indigo/Violet/Teal/Pink
+   ================================================================ */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: oklch(0.10 0.025 285);
+  --foreground: oklch(0.98 0.01 285);
+  --card: oklch(0.14 0.03 285 / 0.8);
+  --card-foreground: oklch(0.98 0.01 285);
+  --popover: oklch(0.13 0.03 285);
+  --popover-foreground: oklch(0.98 0.01 285);
+  --primary: oklch(0.72 0.24 295);          /* Radiant Neon Purple */
+  --primary-foreground: oklch(0.08 0.02 285);
+  --secondary: oklch(0.20 0.05 285);
+  --secondary-foreground: oklch(0.92 0.03 285);
+  --muted: oklch(0.18 0.03 285);
+  --muted-foreground: oklch(0.65 0.05 285);
+  --accent: oklch(0.25 0.09 300);
+  --accent-foreground: oklch(0.96 0.05 300);
+  --destructive: oklch(0.72 0.22 25);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.72 0.24 295);
+  --chart-1: oklch(0.74 0.25 295);
+  --chart-2: oklch(0.75 0.22 215);
+  --chart-3: oklch(0.78 0.20 150);
+  --chart-4: oklch(0.82 0.19 65);
+  --chart-5: oklch(0.75 0.25 345);
+  --sidebar: oklch(0.12 0.025 285);
+  --sidebar-foreground: oklch(0.98 0.01 285);
+  --sidebar-primary: oklch(0.72 0.24 295);
+  --sidebar-primary-foreground: oklch(0.08 0.02 285);
+  --sidebar-accent: oklch(0.25 0.09 300);
+  --sidebar-accent-foreground: oklch(0.96 0.05 300);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.72 0.24 295);
 }
 
+/* ================================================================
+   BASE LAYER & TYPOGRAPHY
+   ================================================================ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    background-image: 
+      radial-gradient(at 0% 0%, oklch(0.56 0.25 295 / 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, oklch(0.65 0.22 220 / 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, oklch(0.65 0.26 345 / 0.06) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+  .dark body {
+    background-image: 
+      radial-gradient(at 0% 0%, oklch(0.72 0.24 295 / 0.12) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, oklch(0.75 0.22 215 / 0.10) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, oklch(0.75 0.25 345 / 0.08) 0px, transparent 50%);
   }
   html {
-    @apply font-sans;
+    scroll-behavior: smooth;
   }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), sans-serif;
+  }
+}
+
+/* Font utility helpers */
+.font-sans { font-family: var(--font-sans), sans-serif; }
+.font-heading { font-family: var(--font-heading), sans-serif; }
+.font-display { font-family: var(--font-display), sans-serif; }
+.font-handwritten { font-family: var(--font-handwritten), cursive; }
+.font-mono { font-family: var(--font-mono), monospace; }
+
+/* ================================================================
+   COLORFUL KEYFRAME ANIMATIONS
+   ================================================================ */
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes rainbow-rotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+@keyframes float-delay {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-16px) rotate(-1.5deg); }
+}
+
+@keyframes pulse-neon {
+  0%, 100% {
+    box-shadow: 0 0 15px -2px oklch(0.56 0.25 295 / 0.5), 0 0 35px -6px oklch(0.65 0.22 220 / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px -2px oklch(0.56 0.25 295 / 0.8), 0 0 60px -4px oklch(0.65 0.26 345 / 0.5);
+  }
+}
+
+@keyframes shimmer-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes blob-wander-1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(40px, -60px) scale(1.15); }
+  66% { transform: translate(-30px, 30px) scale(0.9); }
+}
+
+@keyframes blob-wander-2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-50px, 40px) scale(1.1); }
+  66% { transform: translate(35px, -35px) scale(0.95); }
+}
+
+@keyframes blob-wander-3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, 50px) scale(1.2); }
+  66% { transform: translate(-45px, -20px) scale(0.85); }
+}
+
+@keyframes card-sparkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.95); }
+  50% { opacity: 0.9; transform: scale(1.05); }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ================================================================
+   SIGNATURE COLORFUL UTILITY CLASSES
+   ================================================================ */
+
+/* Rainbow Animated Gradient Background */
+.gradient-rainbow {
+  background: linear-gradient(135deg, #a855f7, #6366f1, #06b6d4, #10b981, #f59e0b, #ec4899, #a855f7);
+  background-size: 400% 400%;
+  animation: gradient-flow 8s ease infinite;
+}
+
+/* Cosmic Violet-Pink Gradient */
+.gradient-cosmic {
+  background: linear-gradient(135deg, #9333ea 0%, #4f46e5 50%, #06b6d4 100%);
+  background-size: 200% 200%;
+  animation: gradient-flow 6s ease infinite;
+}
+
+/* Sunset Electric Amber-Fuchsia Gradient */
+.gradient-sunset {
+  background: linear-gradient(135deg, #f43f5e 0%, #fb923c 50%, #facc15 100%);
+  background-size: 200% 200%;
+  animation: gradient-flow 5s ease infinite;
+}
+
+/* Cyan-Emerald Aurora Gradient */
+.gradient-aurora {
+  background: linear-gradient(135deg, #06b6d4 0%, #10b981 50%, #3b82f6 100%);
+  background-size: 200% 200%;
+  animation: gradient-flow 6s ease infinite;
+}
+
+/* Text Gradients */
+.text-gradient-rainbow {
+  background: linear-gradient(135deg, #a855f7, #3b82f6, #06b6d4, #ec4899);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-flow 6s ease infinite;
+}
+
+.text-gradient-cosmic {
+  background: linear-gradient(135deg, #c084fc, #818cf8, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-sunset {
+  background: linear-gradient(135deg, #fb7185, #f97316, #eab308);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated Neon Border Container */
+.rainbow-border-card {
+  position: relative;
+  border-radius: var(--radius-xl);
+  background: var(--card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.3s ease;
+}
+
+.rainbow-border-card::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: calc(var(--radius-xl) + 1.5px);
+  background: linear-gradient(135deg, #a855f7, #6366f1, #06b6d4, #ec4899, #a855f7);
+  background-size: 300% 300%;
+  animation: gradient-flow 6s ease infinite;
+  z-index: -1;
+  opacity: 0.45;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.rainbow-border-card:hover::before {
+  opacity: 1;
+  filter: blur(4px);
+}
+
+/* Floating Animation */
+.animate-float-1 {
+  animation: float-gentle 5s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float-delay 6.5s ease-in-out infinite 0.7s;
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2.5s ease-in-out infinite;
+}
+
+/* Glowing Neon Aura Blob Elements */
+.aura-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.55;
+}
+.dark .aura-blob {
+  opacity: 0.4;
+}
+
+.blob-purple {
+  background: radial-gradient(circle, #a855f7 0%, #6366f1 70%, transparent 100%);
+  animation: blob-wander-1 12s ease-in-out infinite;
+}
+
+.blob-cyan {
+  background: radial-gradient(circle, #06b6d4 0%, #3b82f6 70%, transparent 100%);
+  animation: blob-wander-2 14s ease-in-out infinite;
+}
+
+.blob-pink {
+  background: radial-gradient(circle, #ec4899 0%, #f43f5e 70%, transparent 100%);
+  animation: blob-wander-3 16s ease-in-out infinite;
+}
+
+/* Glassmorphism Surface */
+.glass-panel {
+  background: oklch(1 0 0 / 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid oklch(1 0 0 / 0.3);
+}
+.dark .glass-panel {
+  background: oklch(0.14 0.03 285 / 0.7);
+  border: 1px solid oklch(1 0 0 / 0.1);
+}
+
+/* Handwritten Note Sticky Paper Styling */
+.sticky-note {
+  background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
+  color: #713f12;
+  box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.25), 0 8px 10px -6px rgba(234, 179, 8, 0.2);
+  transform: rotate(-1deg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sticky-note:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 0 15px 30px -5px rgba(234, 179, 8, 0.35);
+}
+.dark .sticky-note {
+  background: linear-gradient(135deg, #422006 0%, #713f12 100%);
+  color: #fef08a;
+  border: 1px solid rgba(250, 204, 21, 0.2);
+}
+
+/* Neon Glow Pulse */
+.neon-glow {
+  animation: pulse-neon 4s ease-in-out infinite;
+}
+
+/* Interactive Card Lift */
+.interactive-card {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.interactive-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 20px 35px -10px oklch(0.56 0.25 295 / 0.25);
+}
+.dark .interactive-card:hover {
+  box-shadow: 0 20px 35px -10px oklch(0.72 0.24 295 / 0.35);
+}
+
+/* Shimmer Light Stripe */
+.shimmer-button {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  animation: shimmer-sweep 3s ease-in-out infinite;
 }

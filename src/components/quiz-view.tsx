@@ -4,7 +4,6 @@ import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { QuizQuestionRow, QuizAttemptRow, QuizRow } from '@/types/database.types';
@@ -229,152 +228,175 @@ export function QuizView({
 
       {/* Active Quiz Taking Interface */}
       {!isGenerating && hasQuestions && !isQuizFinished && currentQuestion && (
-        <Card className="max-w-2xl mx-auto border-border shadow-md">
-          <CardHeader className="space-y-2">
-            <div className="flex justify-between items-center text-xs text-muted-foreground">
-              <span>
-                Question {currentQuestionIndex + 1} of {questions.length}
-              </span>
-              <span>
-                Progress: {Math.round(((currentQuestionIndex) / questions.length) * 100)}%
-              </span>
-            </div>
-            <Progress
-              value={((currentQuestionIndex + 1) / questions.length) * 100}
-              className="h-1.5"
-            />
-            <CardTitle className="text-lg sm:text-xl font-medium pt-2 leading-relaxed">
-              {currentQuestion.question}
-            </CardTitle>
-          </CardHeader>
+        <Card className="max-w-2xl mx-auto rainbow-border-card border-0 shadow-2xl overflow-hidden relative">
+          <div className="absolute -top-16 -right-16 w-44 h-44 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+            <CardHeader className="space-y-3 relative z-10">
+              <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
+                <span className="font-heading font-semibold text-foreground">
+                  Question {currentQuestionIndex + 1} <span className="text-muted-foreground font-normal">of {questions.length}</span>
+                </span>
+                <span className="text-[11px] font-display font-bold text-emerald-500 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                  Multiple Choice
+                </span>
+              </div>
+              
+              {/* Rainbow animated progress bar */}
+              <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full gradient-rainbow transition-all duration-300"
+                  style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+                />
+              </div>
 
-          <CardContent className="space-y-3">
-            {(currentQuestion.options as string[]).map((option, idx) => {
-              const isSelected = selectedAnswers[currentQuestionIndex] === idx;
-              const isCorrect = idx === currentQuestion.correct_index;
+              <CardTitle className="font-heading text-xl sm:text-2xl font-bold pt-2 leading-relaxed">
+                {currentQuestion.question}
+              </CardTitle>
+            </CardHeader>
 
-              let customStyle = 'border-border hover:bg-muted/60 text-left';
+            <CardContent className="space-y-3 relative z-10">
+              {(currentQuestion.options as string[]).map((option, idx) => {
+                const isSelected = selectedAnswers[currentQuestionIndex] === idx;
+                const isCorrect = idx === currentQuestion.correct_index;
 
-              if (showExplanationForCurrent) {
-                if (isCorrect) {
-                  customStyle = 'border-emerald-500 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 font-semibold';
-                } else if (isSelected && !isCorrect) {
-                  customStyle = 'border-rose-500 bg-rose-500/10 text-rose-800 dark:text-rose-300 font-semibold';
-                } else {
-                  customStyle = 'border-border/40 opacity-50';
+                let customStyle = 'border-violet-300/30 dark:border-violet-800/30 hover:bg-violet-50/50 dark:hover:bg-violet-950/30 hover:border-violet-400 text-left';
+
+                if (showExplanationForCurrent) {
+                  if (isCorrect) {
+                    customStyle = 'border-emerald-500 bg-emerald-500/15 text-emerald-950 dark:text-emerald-200 font-semibold shadow-md';
+                  } else if (isSelected && !isCorrect) {
+                    customStyle = 'border-rose-500 bg-rose-500/15 text-rose-950 dark:text-rose-200 font-semibold shadow-md';
+                  } else {
+                    customStyle = 'border-border/30 opacity-40';
+                  }
+                } else if (isSelected) {
+                  customStyle = 'border-violet-500 bg-violet-500/15 text-foreground font-semibold ring-2 ring-violet-500 shadow-md';
                 }
-              } else if (isSelected) {
-                customStyle = 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary';
-              }
 
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => handleSelectOption(idx)}
-                  disabled={showExplanationForCurrent}
-                  className={`w-full p-4 rounded-xl text-sm transition-all flex items-start gap-3 border ${customStyle}`}
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleSelectOption(idx)}
+                    disabled={showExplanationForCurrent}
+                    className={`w-full p-4 rounded-2xl text-sm transition-all flex items-start gap-3.5 border ${customStyle}`}
+                  >
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-muted/80 text-foreground font-display font-bold text-xs shadow-xs">
+                      {String.fromCharCode(65 + idx)}
+                    </span>
+                    <span className="flex-1 text-left font-sans pt-0.5 leading-relaxed">{option}</span>
+
+                    {showExplanationForCurrent && isCorrect && (
+                      <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5 animate-bounce-subtle" />
+                    )}
+                    {showExplanationForCurrent && isSelected && !isCorrect && (
+                      <XCircle className="h-5 w-5 text-rose-500 shrink-0 mt-0.5" />
+                    )}
+                  </button>
+                );
+              })}
+
+              {/* Explanation box after answer confirmation */}
+              {showExplanationForCurrent && (
+                <Alert className="mt-4 border-violet-400/40 bg-violet-500/10 rounded-2xl">
+                  <HelpCircle className="h-4 w-4 text-violet-500" />
+                  <AlertTitle className="text-xs font-heading font-bold">Concept Explanation</AlertTitle>
+                  <AlertDescription className="text-xs leading-relaxed text-foreground mt-1 font-sans">
+                    {currentQuestion.explanation}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </CardContent>
+
+            <CardFooter className="flex justify-between border-t border-border/40 pt-4 relative z-10">
+              <span className="text-xs text-muted-foreground font-mono">
+                {showExplanationForCurrent
+                  ? selectedAnswers[currentQuestionIndex] === currentQuestion.correct_index
+                    ? '✨ Correct answer!'
+                    : '💡 Take note of the explanation.'
+                  : 'Select an option and confirm'}
+              </span>
+
+              {showExplanationForCurrent ? (
+                <Button
+                  onClick={handleNextQuestion}
+                  className="gradient-cosmic shimmer-button text-white font-heading font-bold gap-2 rounded-xl shadow-md"
                 >
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-current text-xs font-bold">
-                    {String.fromCharCode(65 + idx)}
-                  </span>
-                  <span className="flex-1 text-left">{option}</span>
-
-                  {showExplanationForCurrent && isCorrect && (
-                    <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
+                  {currentQuestionIndex + 1 < questions.length ? (
+                    <>
+                      Next Question
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      View Results
+                      <Trophy className="h-4 w-4" />
+                    </>
                   )}
-                  {showExplanationForCurrent && isSelected && !isCorrect && (
-                    <XCircle className="h-5 w-5 text-rose-500 shrink-0 mt-0.5" />
-                  )}
-                </button>
-              );
-            })}
-
-            {/* Explanation box after answer confirmation */}
-            {showExplanationForCurrent && (
-              <Alert className="mt-4 border-primary/30 bg-primary/5">
-                <HelpCircle className="h-4 w-4 text-primary" />
-                <AlertTitle className="text-xs font-semibold">Explanation</AlertTitle>
-                <AlertDescription className="text-xs leading-relaxed text-foreground mt-1">
-                  {currentQuestion.explanation}
-                </AlertDescription>
-              </Alert>
-            )}
-          </CardContent>
-
-          <CardFooter className="flex justify-between border-t border-border pt-4">
-            <span className="text-xs text-muted-foreground">
-              {showExplanationForCurrent
-                ? selectedAnswers[currentQuestionIndex] === currentQuestion.correct_index
-                  ? 'Correct answer!'
-                  : 'Incorrect answer.'
-                : 'Select an option and confirm'}
-            </span>
-
-            {showExplanationForCurrent ? (
-              <Button onClick={handleNextQuestion} className="gap-2">
-                {currentQuestionIndex + 1 < questions.length ? (
-                  <>
-                    Next Question
-                    <ArrowRight className="h-4 w-4" />
-                  </>
-                ) : (
-                  <>
-                    View Results
-                    <Trophy className="h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            ) : (
-              <Button
-                onClick={handleConfirmAnswer}
-                disabled={selectedAnswers[currentQuestionIndex] === undefined}
-                className="gap-2"
-              >
-                Confirm Answer
-              </Button>
-            )}
-          </CardFooter>
-        </Card>
-      )}
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleConfirmAnswer}
+                  disabled={selectedAnswers[currentQuestionIndex] === undefined}
+                  className="gradient-cosmic shimmer-button text-white font-heading font-bold gap-2 rounded-xl shadow-md disabled:opacity-50"
+                >
+                  Confirm Answer
+                </Button>
+              )}
+            </CardFooter>
+          </Card>
+        )}
 
       {/* Quiz Results Screen */}
       {!isGenerating && isQuizFinished && (
         <div className="max-w-3xl mx-auto space-y-6">
-          <Card className="border-border shadow-md text-center py-6">
-            <CardHeader>
-              <div className="mx-auto h-16 w-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-2">
-                <Trophy className="h-8 w-8" />
+          <Card className="rainbow-border-card border-0 shadow-2xl text-center py-8 overflow-hidden relative">
+            <div className="absolute -top-20 -left-20 w-60 h-60 bg-violet-500/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
+
+            <CardHeader className="relative z-10">
+              <div className="mx-auto h-20 w-20 rounded-3xl bg-gradient-to-br from-amber-400 via-rose-500 to-violet-600 text-white flex items-center justify-center mb-3 shadow-xl animate-float-1">
+                <Trophy className="h-10 w-10" />
               </div>
-              <CardTitle className="text-2xl font-bold">Quiz Results</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-3xl font-heading font-extrabold tracking-tight">
+                Quiz <span className="text-gradient-rainbow">Completed!</span>
+              </CardTitle>
+              <CardDescription className="text-sm">
                 {percentage >= 80
-                  ? 'Outstanding! You have thoroughly mastered this material.'
+                  ? '🌟 Outstanding! You have thoroughly mastered this study material.'
                   : percentage >= 60
-                  ? 'Good effort! Review the explanations below to solidify your understanding.'
-                  : 'Keep practicing! Review the concepts and try again.'}
+                  ? '⚡ Good effort! Review the explanations below to solidify your understanding.'
+                  : '💪 Keep practicing! Active recall builds long-term neural connections.'}
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative z-10">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6 py-2">
-                <div className="rounded-2xl border border-border p-4 w-36">
-                  <p className="text-3xl font-extrabold text-foreground">{percentage}%</p>
-                  <p className="text-xs text-muted-foreground mt-1">Score</p>
+                <div className="rounded-2xl border border-violet-400/30 bg-muted/40 p-5 w-40 shadow-sm">
+                  <p className="font-display text-4xl font-extrabold text-gradient-rainbow">{percentage}%</p>
+                  <p className="text-xs text-muted-foreground mt-1 font-mono uppercase tracking-wider">Score</p>
                 </div>
-                <div className="rounded-2xl border border-border p-4 w-36">
-                  <p className="text-3xl font-extrabold text-foreground">
-                    {finalScore} / {questions.length}
+                <div className="rounded-2xl border border-emerald-400/30 bg-muted/40 p-5 w-40 shadow-sm">
+                  <p className="font-display text-4xl font-extrabold text-emerald-500">
+                    {finalScore} <span className="text-lg font-normal text-muted-foreground">/ {questions.length}</span>
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">Correct Answers</p>
+                  <p className="text-xs text-muted-foreground mt-1 font-mono uppercase tracking-wider">Correct</p>
                 </div>
               </div>
 
-              <div className="flex justify-center gap-3 mt-6">
-                <Button onClick={retakeQuiz} variant="outline" className="gap-2">
+              {/* Handwritten celebration sticky note */}
+              <div className="max-w-md mx-auto my-6">
+                <div className="sticky-note p-4 rounded-2xl text-center space-y-1 shadow-md">
+                  <p className="font-handwritten text-2xl font-bold">
+                    {percentage >= 80 ? '🎉 Exam Ready! You crushed this quiz!' : '📖 Review the missed questions below to level up!'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex justify-center gap-3 mt-4">
+                <Button onClick={retakeQuiz} variant="outline" className="gap-2 rounded-xl font-heading font-semibold">
                   <RotateCcw className="h-4 w-4" />
                   Retake Quiz
                 </Button>
-                <Button onClick={handleGenerateQuiz} className="gap-2">
+                <Button onClick={handleGenerateQuiz} className="gradient-cosmic shimmer-button text-white gap-2 rounded-xl font-heading font-bold shadow-md">
                   <Sparkles className="h-4 w-4" />
                   Generate New Quiz
                 </Button>

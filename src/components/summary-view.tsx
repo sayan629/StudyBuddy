@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Sparkles, RefreshCw, AlertCircle, CheckCircle, BookOpen, Key } from 'lucide-react';
+import { Sparkles, RefreshCw, AlertCircle, BookOpen, Key } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface SummaryViewProps {
@@ -136,60 +136,97 @@ export function SummaryView({
       {/* Content Display */}
       {!isLoading && hasContent && (
         <div className="space-y-6">
-          <Card className="border-border/80 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" />
-                Core Overview
+          <Card className="rainbow-border-card border-0 shadow-xl overflow-hidden relative">
+            <div className="absolute -top-16 -right-16 w-44 h-44 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
+            <CardHeader className="relative z-10">
+              <CardTitle className="text-xl font-heading font-extrabold flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 text-white shadow-md animate-float-1">
+                  <Sparkles className="h-4 w-4" />
+                </div>
+                Core Executive Overview
               </CardTitle>
-              <CardDescription>Synthesized key concepts and high-level structure</CardDescription>
+              <CardDescription className="text-xs">
+                Synthesized essential structure and core conceptual narrative
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="prose dark:prose-invert max-w-none text-sm leading-relaxed text-foreground whitespace-pre-line">
+            <CardContent className="relative z-10">
+              <div className="prose dark:prose-invert max-w-none text-sm sm:text-base leading-relaxed text-foreground/90 whitespace-pre-line font-sans">
                 {summary}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-border/80 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                <Key className="h-4 w-4 text-amber-500" />
-                Key Points & High-Yield Takeaways
-              </CardTitle>
-              <CardDescription>Must-know facts, formulas, and critical concepts</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3">
-                {keyPoints?.map((point, index) => (
-                  <li
-                    key={index}
-                    className="flex items-start gap-3 rounded-lg border border-border/50 bg-muted/30 p-3 text-sm text-foreground transition-colors hover:bg-muted/50"
-                  >
-                    <CheckCircle className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-                    <span className="leading-relaxed">{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+          {/* Key Points & Sticky Study Hack side-by-side or stacked */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-3">
+              <Card className="rainbow-border-card border-0 shadow-xl overflow-hidden relative h-full">
+                <CardHeader>
+                  <CardTitle className="text-xl font-heading font-extrabold flex items-center gap-2.5">
+                    <div className="p-2 rounded-xl bg-gradient-to-br from-amber-500 to-rose-500 text-white shadow-md animate-float-2">
+                      <Key className="h-4 w-4" />
+                    </div>
+                    High-Yield Key Takeaways
+                  </CardTitle>
+                  <CardDescription className="text-xs">
+                    Crucial formulas, definitions, and exam-critical concepts
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3.5">
+                    {keyPoints?.map((point, index) => (
+                      <li
+                        key={index}
+                        className="flex items-start gap-3 rounded-2xl border border-violet-400/20 bg-muted/40 p-3.5 text-sm text-foreground transition-all hover:bg-muted/70 hover:scale-[1.01] shadow-xs"
+                      >
+                        <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 text-white flex items-center justify-center font-display font-bold text-xs shrink-0 mt-0.5 shadow-sm">
+                          {index + 1}
+                        </div>
+                        <span className="leading-relaxed font-sans">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Handwritten Sticky Note */}
+            <div className="lg:col-span-1">
+              <div className="sticky-note p-5 rounded-3xl space-y-3 h-full flex flex-col justify-between shadow-xl">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-1.5 font-bold text-xs uppercase tracking-wider opacity-80">
+                    <Sparkles className="h-4 w-4" />
+                    <span>Quick Study Hack</span>
+                  </div>
+                  <p className="font-handwritten text-2xl leading-snug font-bold">
+                    &quot;Read the core takeaways out loud, then jump straight into Flashcards to test your recall!&quot;
+                  </p>
+                </div>
+                <div className="pt-2 border-t border-amber-900/10 text-xs font-mono opacity-80">
+                  🎯 AI High-Yield Focus
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Empty State */}
       {!isLoading && !hasContent && !error && (
-        <Card className="border-dashed border-2 py-12 text-center">
+        <Card className="border-dashed border-2 border-violet-400/40 rounded-3xl py-14 text-center bg-card/40 backdrop-blur shadow-sm">
           <CardContent className="flex flex-col items-center justify-center space-y-4">
-            <div className="p-3 bg-primary/10 text-primary rounded-full">
-              <Sparkles className="h-6 w-6" />
+            <div className="h-16 w-16 rounded-3xl bg-gradient-to-br from-violet-500 to-cyan-500 text-white flex items-center justify-center shadow-lg animate-bounce-subtle">
+              <Sparkles className="h-8 w-8" />
             </div>
             <div className="space-y-1">
-              <h3 className="font-semibold text-base">No summary generated yet</h3>
+              <h3 className="font-heading font-extrabold text-xl">No summary generated yet</h3>
               <p className="text-xs text-muted-foreground max-w-sm">
                 Click the button below to have Gemini AI analyze your uploaded notes and generate an executive summary with high-yield key takeaways.
               </p>
             </div>
-            <Button onClick={generateSummary} className="gap-2">
+            <Button
+              onClick={generateSummary}
+              className="gradient-cosmic shimmer-button text-white font-heading font-bold gap-2 h-11 px-7 rounded-2xl shadow-lg hover:opacity-95 transition-all"
+            >
               <Sparkles className="h-4 w-4" />
               Generate Summary Now
             </Button>

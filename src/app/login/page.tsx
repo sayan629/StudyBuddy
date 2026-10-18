@@ -78,32 +78,37 @@ function LoginForm() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-muted/30">
-      <div className="absolute top-4 right-4">
+    <div className="relative min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-background overflow-hidden">
+      {/* Background Decorative Aura Blobs */}
+      <div className="aura-blob blob-purple w-96 h-96 -top-20 -left-20" />
+      <div className="aura-blob blob-cyan w-96 h-96 -bottom-20 -right-20" />
+      <div className="aura-blob blob-pink w-80 h-80 top-1/2 left-10" />
+
+      <div className="absolute top-4 right-4 z-20">
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-md space-y-6 relative z-10">
         <div className="flex flex-col items-center text-center space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2 font-bold text-2xl tracking-tight">
-            <div className="p-2 bg-primary text-primary-foreground rounded-xl shadow-md">
+          <Link href="/" className="inline-flex items-center gap-2.5 font-heading font-extrabold text-2xl tracking-tight">
+            <div className="p-2 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-cyan-500 text-white shadow-xl animate-float-1">
               <BookOpen className="h-6 w-6" />
             </div>
-            <span>StudyBuddy</span>
+            <span className="text-gradient-rainbow">StudyBuddy</span>
           </Link>
-          <p className="text-sm text-muted-foreground">Your AI-powered study companion</p>
+          <p className="text-xs text-muted-foreground font-sans">Your AI-powered study assistant</p>
         </div>
 
-        <Card className="shadow-lg border-border/80">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-xl font-semibold">Welcome back</CardTitle>
-            <CardDescription>
-              Sign in to access your notes, flashcards, and quizzes
+        <Card className="rainbow-border-card border-0 shadow-2xl overflow-hidden relative">
+          <CardHeader className="space-y-1 pb-4">
+            <CardTitle className="text-2xl font-heading font-extrabold tracking-tight">Welcome back</CardTitle>
+            <CardDescription className="text-xs">
+              Sign in to access your study library, flashcards, and quizzes
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
-              <Alert variant="destructive" className="py-2.5">
+              <Alert variant="destructive" className="py-2.5 rounded-xl">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription className="text-xs leading-relaxed">{error}</AlertDescription>
               </Alert>
@@ -112,12 +117,12 @@ function LoginForm() {
             <Button
               type="button"
               variant="outline"
-              className="w-full h-10 font-medium"
+              className="w-full h-11 font-heading font-semibold rounded-xl border-violet-300/40 dark:border-violet-700/40 hover:bg-muted/60 transition-all shadow-xs"
               onClick={handleGoogleLogin}
               disabled={googleLoading || loading}
             >
               {googleLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin text-violet-500" />
               ) : (
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                   <path
@@ -141,24 +146,25 @@ function LoginForm() {
               Continue with Google
             </Button>
 
-            <div className="relative">
+            <div className="relative my-2">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-border" />
+                <span className="w-full border-t border-border/40" />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
+              <div className="relative flex justify-center text-[11px] font-mono uppercase tracking-wider">
                 <span className="bg-card px-2 text-muted-foreground">Or with email</span>
               </div>
             </div>
 
             <form onSubmit={handleEmailLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="font-heading font-semibold text-xs">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="rounded-xl border-violet-300/40 dark:border-violet-700/40 h-10 text-xs focus-visible:ring-violet-500"
                   required
                   autoComplete="email"
                   disabled={loading || googleLoading}
@@ -167,10 +173,10 @@ function LoginForm() {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password" className="font-heading font-semibold text-xs">Password</Label>
                   <Link
                     href="/forgot-password"
-                    className="text-xs text-primary hover:underline underline-offset-4"
+                    className="text-xs text-violet-600 dark:text-violet-400 hover:underline underline-offset-4"
                   >
                     Forgot password?
                   </Link>
@@ -181,23 +187,28 @@ function LoginForm() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className="rounded-xl border-violet-300/40 dark:border-violet-700/40 h-10 text-xs focus-visible:ring-violet-500"
                   required
                   autoComplete="current-password"
                   disabled={loading || googleLoading}
                 />
               </div>
 
-              <Button type="submit" className="w-full h-10 font-medium" disabled={loading || googleLoading}>
+              <Button
+                type="submit"
+                className="w-full h-11 gradient-cosmic shimmer-button text-white font-heading font-bold rounded-xl shadow-lg hover:opacity-95 transition-all"
+                disabled={loading || googleLoading}
+              >
                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Sign in
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="flex justify-center border-t border-border pt-4">
-            <p className="text-xs text-muted-foreground">
+          <CardFooter className="flex justify-center border-t border-border/40 pt-4">
+            <p className="text-xs text-muted-foreground font-sans">
               Don&apos;t have an account?{' '}
-              <Link href="/signup" className="text-primary font-semibold hover:underline underline-offset-4">
-                Sign up
+              <Link href="/signup" className="text-violet-600 dark:text-violet-400 font-bold hover:underline underline-offset-4">
+                Sign up free
               </Link>
             </p>
           </CardFooter>
