@@ -46,8 +46,8 @@ function getGeminiClient(): GoogleGenAI {
   return new GoogleGenAI({ apiKey });
 }
 
-// gemini-3.8-flash: current recommended model for new API keys
-const GEMINI_MODEL = 'gemini-3.8-flash';
+// Fast, reliable, and active model for text analysis, flashcards, and quizzes
+const GEMINI_MODEL = 'gemini-2.5-flash-lite';
 
 /**
  * Summarize long text by breaking into ~12,000 char chunks if necessary, then combining.

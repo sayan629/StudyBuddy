@@ -57,7 +57,14 @@ export function QuizView({
       const res = await fetch(`/api/documents/${documentId}/quiz`, {
         method: 'POST',
       });
-      const data = await res.json();
+      let data;
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        throw new Error(text || `Server returned status ${res.status}. Please retry.`);
+      }
       if (!res.ok) {
         throw new Error(data.error || 'Failed to generate quiz.');
       }

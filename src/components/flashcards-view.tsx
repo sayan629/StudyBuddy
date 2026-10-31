@@ -71,7 +71,14 @@ export function FlashcardsView({
       const res = await fetch(`/api/documents/${documentId}/flashcards`, {
         method: 'POST',
       });
-      const data = await res.json();
+      let data;
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        throw new Error(text || `Server returned status ${res.status}. Please retry.`);
+      }
       if (!res.ok) {
         throw new Error(data.error || 'Failed to generate flashcards.');
       }
@@ -101,7 +108,14 @@ export function FlashcardsView({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ result }),
       });
-      const data = await res.json();
+      let data;
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        throw new Error(text || `Server returned status ${res.status}. Please retry.`);
+      }
       if (!res.ok) {
         throw new Error(data.error || 'Failed to submit review');
       }
